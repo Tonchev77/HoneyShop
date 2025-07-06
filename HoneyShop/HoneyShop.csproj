@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aspnet-HoneyShop-ee99477b-f155-4e1c-a695-f55e8afb058d</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.17" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.17" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.17" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.17" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.17" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HoneShop.GCommon\HoneyShop.GCommon.csproj" />
+    <ProjectReference Include="..\HoneyShop.Data.Models\HoneyShop.Data.Models.csproj" />
+    <ProjectReference Include="..\HoneyShop.Data\HoneyShop.Data.csproj" />
+    <ProjectReference Include="..\HoneyShop.Services.Core\HoneyShop.Services.Core.csproj" />
+    <ProjectReference Include="..\HoneyShop.ViewModels\HoneyShop.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>
