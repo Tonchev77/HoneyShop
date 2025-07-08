@@ -2,10 +2,6 @@
 {
     public class ValidationConstants
     {
-        public static class Common
-        {
-            public static string DateFormat = "dd-MM-yyyy";
-        }
 
         public static class Product
         {

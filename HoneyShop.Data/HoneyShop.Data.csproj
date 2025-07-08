@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HoneShop.GCommon\HoneyShop.GCommon.csproj" />
+    <ProjectReference Include="..\HoneyShop.Data.Common\HoneyShop.Data.Common.csproj" />
     <ProjectReference Include="..\HoneyShop.Data.Models\HoneyShop.Data.Models.csproj" />
   </ItemGroup>
 
