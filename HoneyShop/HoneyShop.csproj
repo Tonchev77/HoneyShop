@@ -24,6 +24,7 @@
     <ProjectReference Include="..\HoneyShop.Data\HoneyShop.Data.csproj" />
     <ProjectReference Include="..\HoneyShop.Services.Core\HoneyShop.Services.Core.csproj" />
     <ProjectReference Include="..\HoneyShop.ViewModels\HoneyShop.ViewModels.csproj" />
+    <ProjectReference Include="..\HoneyShop.Web.Infrastructure\HoneyShop.Web.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -45,6 +45,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoneyShop.ViewModels", "Hon
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoneyShop.Data.Common", "HoneyShop.Data.Common\HoneyShop.Data.Common.csproj", "{2673C0DF-691D-4D36-9FC2-88F881539BBA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HoneyShop.Web.Infrastructure", "HoneyShop.Web.Infrastructure\HoneyShop.Web.Infrastructure.csproj", "{416ACA0B-9456-40C0-AC4D-9A536136888C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{2673C0DF-691D-4D36-9FC2-88F881539BBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2673C0DF-691D-4D36-9FC2-88F881539BBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2673C0DF-691D-4D36-9FC2-88F881539BBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{416ACA0B-9456-40C0-AC4D-9A536136888C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{416ACA0B-9456-40C0-AC4D-9A536136888C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{416ACA0B-9456-40C0-AC4D-9A536136888C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{416ACA0B-9456-40C0-AC4D-9A536136888C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,6 +96,7 @@ Global
 		{15B705CC-E59F-4856-A11D-4D6461EC4A6C} = {93EFF662-4BAA-45F7-ACF7-F915020821A7}
 		{409AFAB7-F4F0-4FA4-985D-64ED444A452C} = {36AE5EF6-960E-4DBF-916F-73AA7A4A87C3}
 		{2673C0DF-691D-4D36-9FC2-88F881539BBA} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{416ACA0B-9456-40C0-AC4D-9A536136888C} = {36AE5EF6-960E-4DBF-916F-73AA7A4A87C3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {78B56E91-7F25-4077-92DD-98AE5708F118}

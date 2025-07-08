@@ -3,6 +3,9 @@ namespace HoneyShop
     using HoneyShop.Data;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+    using HoneyShop.Web.Infrastructure.Extensions;
+    using HoneyShop.Data.Repository.Interfaces;
+
     public class Program
     {
         public static void Main(string[] args)
@@ -27,6 +30,8 @@ namespace HoneyShop
             })
             .AddEntityFrameworkStores<HoneyShopDbContext>();
             builder.Services.AddControllersWithViews();
+
+            //builder.Services.AddUserDefinedRepositories(typeof(IRepository).Assembly);
 
             WebApplication app = builder.Build();
 
