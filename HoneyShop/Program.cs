@@ -6,6 +6,8 @@ namespace HoneyShop
     using HoneyShop.Web.Infrastructure.Extensions;
     using HoneyShop.Data.Repository.Interfaces;
     using HoneyShop.Services.Core.Contracts;
+    using HoneyShop.Services.Core;
+    using HoneyShop.Data.Repository;
 
     public class Program
     {
@@ -32,9 +34,15 @@ namespace HoneyShop
             .AddEntityFrameworkStores<HoneyShopDbContext>();
             builder.Services.AddControllersWithViews();
 
-            builder.Services.AddUserDefinedServices(typeof(ICategoryRepository).Assembly);
+            //builder.Services.AddUserDefinedServices(typeof(ICategoryRepository).Assembly);
 
-            builder.Services.AddRepositories(typeof(ICategoryRepository).Assembly);
+            //builder.Services.AddRepositories(typeof(ICategoryRepository).Assembly);
+
+            builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             WebApplication app = builder.Build();
 
