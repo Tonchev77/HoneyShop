@@ -16,7 +16,7 @@
             IdentityUser defaultUser = new IdentityUser
             {
                 Id = "15167365-502c-42be-9f14-3e623c2e465e",
-                UserName = "admin@recipesharing.com",
+                UserName = "admin@honeyshop.com",
                 NormalizedUserName = "ADMIN@HONEYSHOP.COM",
                 Email = "admin@honeyshop.com",
                 NormalizedEmail = "ADMIN@HONEYSHOP.COM",

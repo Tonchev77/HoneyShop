@@ -17,6 +17,7 @@ namespace HoneyShop.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
+
             return View();
         }
 

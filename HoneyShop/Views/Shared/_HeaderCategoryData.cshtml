@@ -1,0 +1,9 @@
+﻿@using HoneyShop.ViewModels.Home
+@model IEnumerable<GetAllCategoriesViewModel>
+
+<ul class="depart-hover">
+    @foreach (GetAllCategoriesViewModel category in Model)
+    {
+        <li><a href="#">@category.Name</a></li>
+    }
+</ul>

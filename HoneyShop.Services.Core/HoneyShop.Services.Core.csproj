@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\HoneyShop.Data.Models\HoneyShop.Data.Models.csproj" />
     <ProjectReference Include="..\HoneyShop.Data\HoneyShop.Data.csproj" />
     <ProjectReference Include="..\HoneyShop.ViewModels\HoneyShop.ViewModels.csproj" />

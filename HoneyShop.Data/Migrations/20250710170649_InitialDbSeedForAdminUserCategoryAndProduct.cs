@@ -16,7 +16,7 @@ namespace HoneyShop.Data.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "15167365-502c-42be-9f14-3e623c2e465e", 0, "404468ad-679f-4d60-b807-748862dab028", "admin@honeyshop.com", true, false, null, "ADMIN@HONEYSHOP.COM", "ADMIN@HONEYSHOP.COM", "AQAAAAIAAYagAAAAEKQC4MvE4VhHK6/GjbRof29eehVsOWuoexbYiUs722xLjU+xO/dKeofgEMODoN8nYA==", null, false, "f4222559-0e8e-4efa-9ed3-6a313c82916c", false, "admin@recipesharing.com" });
+                values: new object[] { "15167365-502c-42be-9f14-3e623c2e465e", 0, "404468ad-679f-4d60-b807-748862dab028", "admin@honeyshop.com", true, false, null, "ADMIN@HONEYSHOP.COM", "ADMIN@HONEYSHOP.COM", "AQAAAAIAAYagAAAAEKQC4MvE4VhHK6/GjbRof29eehVsOWuoexbYiUs722xLjU+xO/dKeofgEMODoN8nYA==", null, false, "f4222559-0e8e-4efa-9ed3-6a313c82916c", false, "admin@honeyshop.com" });
 
             migrationBuilder.InsertData(
                 table: "Categories",
