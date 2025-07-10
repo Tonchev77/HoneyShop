@@ -31,7 +31,7 @@ namespace HoneyShop
             .AddEntityFrameworkStores<HoneyShopDbContext>();
             builder.Services.AddControllersWithViews();
 
-            //builder.Services.AddUserDefinedRepositories(typeof(IRepository).Assembly);
+            builder.Services.AddRepositories(typeof(IProductRepository).Assembly);
 
             WebApplication app = builder.Build();
 
