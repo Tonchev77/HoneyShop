@@ -1,10 +1,10 @@
-using System.Diagnostics;
-using HoneyShop.Models;
-using Microsoft.AspNetCore.Mvc;
-
 namespace HoneyShop.Controllers
 {
-    public class HomeController : Controller
+    using System.Diagnostics;
+    using HoneyShop.Models;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
 
@@ -13,6 +13,8 @@ namespace HoneyShop.Controllers
             _logger = logger;
         }
 
+        [HttpGet]
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
