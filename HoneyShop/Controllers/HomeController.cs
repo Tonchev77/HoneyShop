@@ -4,7 +4,7 @@ namespace HoneyShop.Controllers
     using HoneyShop.Models;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    public class HomeController : BaseController
+    public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
 
@@ -15,9 +15,8 @@ namespace HoneyShop.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Index()
+        public  IActionResult Index()
         {
-
             return View();
         }
 
