@@ -3,6 +3,7 @@
     using HoneyShop.Data.Models;
     using HoneyShop.Data.Repository.Interfaces;
     using HoneyShop.Services.Core.Contracts;
+    using HoneyShop.ViewModels.Home;
     using HoneyShop.ViewModels.Shop;
     using Microsoft.EntityFrameworkCore;
     using System;
@@ -12,24 +13,35 @@
     public class ProductService : IProductService
     {
         private readonly IProductRepository productRepository;
+        private readonly ICategoryRepository categoryRepository;
 
-        public ProductService(IProductRepository productRepository)
+        public ProductService(IProductRepository productRepository, ICategoryRepository categoryRepository)
         {
             this.productRepository = productRepository;
+            this.categoryRepository = categoryRepository;
         }
 
         public async Task<IEnumerable<GetAllProductsViewModel>> GetAllProductsAsync()
         {
-           IEnumerable<GetAllProductsViewModel> allProducts = await this.productRepository
-                .GetAllAttached()
+            List<Product> products = await this.productRepository
+            .GetAllAttached()
+            .Include(p => p.Category)
+            .ToListAsync();
+
+            IEnumerable<GetAllProductsViewModel> allProducts = products
                 .Select(p => new GetAllProductsViewModel
                 {
                     Id = p.Id,
                     Name = p.Name,
                     Price = p.Price,
                     ImageUrl = p.ImageUrl,
+                    Category = new GetAllCategoriesViewModel()
+                    {
+                        Id = p.Category.Id,
+                        Name = p.Category.Name
+                    }
                 })
-                .ToArrayAsync();
+                .ToList();
 
             return allProducts;
         }
@@ -40,20 +52,30 @@
             if (id.HasValue)
             {
                 Product? productModel = await this.productRepository
-                    .SingleOrDefaultAsync(p => p.Id == id.Value);
+                    .SingleOrDefaultAsync(p => p.Id == id.Value); 
 
                 if (productModel != null)
                 {
-                    detailsVm = new GetProductDetailViewModel()
+                    Guid categoryId = productModel.CategoryId;
+                    Category? category = await categoryRepository.GetByIdAsync(categoryId);
+
+                    if (category != null) 
                     {
-                        Id = productModel.Id,
-                        Name = productModel.Name,
-                        ImageUrl = productModel.ImageUrl,
-                        Description = productModel.Description,
-                        Price = productModel.Price,
-                        IsActive = productModel.IsActive,
-                        //Category = productModel.Category.Name,
-                    };
+                        detailsVm = new GetProductDetailViewModel()
+                        {
+                            Id = productModel.Id,
+                            Name = productModel.Name,
+                            ImageUrl = productModel.ImageUrl,
+                            Description = productModel.Description,
+                            Price = productModel.Price,
+                            IsActive = productModel.IsActive,
+                            Category = new GetAllCategoriesViewModel()
+                            {
+                                Id = category.Id,
+                                Name = category.Name
+                            }
+                        };
+                    }
                 }
             }
             return detailsVm;

@@ -1,4 +1,6 @@
-﻿namespace HoneyShop.ViewModels.Shop
+﻿using HoneyShop.ViewModels.Home;
+
+namespace HoneyShop.ViewModels.Shop
 {
     public class GetAllProductsViewModel
     {
@@ -8,7 +10,7 @@
 
         public decimal Price { get; set; }
 
-        //public Guid CategoryId { get; set; }
+        public virtual GetAllCategoriesViewModel Category { get; set; } = null!;
 
         public string ImageUrl { get; set; } = null!;
 

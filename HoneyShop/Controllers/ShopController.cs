@@ -8,18 +8,31 @@
     public class ShopController : BaseController
     {
         private readonly IProductService productService;
+        private readonly ICategoryService categoryService;
 
-        public ShopController(IProductService productService)
+        public ShopController(IProductService productService, ICategoryService categoryService)
         {
             this.productService = productService;
+            this.categoryService = categoryService;
         }
 
         
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            IEnumerable<GetAllProductsViewModel> allProducts = await this.productService.GetAllProductsAsync();
-            return View(allProducts);
+            ShopIndexViewModel viewModel = new ShopIndexViewModel
+            {
+                Products = await this.productService.GetAllProductsAsync(),
+                Categories = await this.categoryService.GetAllCategoriesAsync()
+            };
+
+            //IEnumerable<GetAllProductsViewModel> allProducts = await this.productService.GetAllProductsAsync();
+
+            //IEnumerable<GetProductCategoryViewModel> allCategories = await this.categoryService.GetAllCategoriesAsync();
+
+            return View(viewModel);
+
+            
         }
 
         [AllowAnonymous]
