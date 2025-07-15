@@ -92,7 +92,14 @@
                                             <ul>
                                                 @if ((User?.Identity?.IsAuthenticated == true))
                                                 {
-                                                    <li class="w-icon active"><a href="#"><i class="icon_bag_alt"></i></a></li>
+                                                    //TODO Fix this to look better
+                                                    <li class="w-icon active">
+                                                        <form asp-controller="Cart" asp-action="Add" asp-route-id="@product.Id" method="post" style="display:inline;">
+                                                            <button type="submit" style="background:none;border:none;padding:0;cursor:pointer;">
+                                                                <i class="icon_bag_alt"></i>
+                                                            </button>
+                                                        </form>
+                                                    </li>
                                                 }
                                                 <li class="quick-view"><a asp-controller="Shop" asp-action="DetailsProduct" asp-route-id="@product.Id">+ Quick View</a></li>
                                             </ul>
