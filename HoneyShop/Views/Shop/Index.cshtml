@@ -70,41 +70,48 @@
                 </div>
                 <div class="product-list">
                     <div class="row">
-                        @foreach (GetAllProductsViewModel product in Model.Products)
+                        @if (Model.Products == null || !Model.Products.Any())
                         {
-                        <div class="col-lg-4 col-sm-6">
-                            
-                            <div class="product-item">
-                                <div class="pi-pic">
-                                    <a asp-controller="Shop" asp-action="DetailsProduct" asp-route-id="@product.Id">
-                                        <img src="@product.ImageUrl" alt="">
-                                    </a>
-                                    <div class="sale pp-sale">Sale</div>
-                                    <div class="icon">
-                                        <i class="icon_heart_alt"></i>
-                                    </div>
-                                    <ul>
-                                        <li class="w-icon active"><a href="#"><i class="icon_bag_alt"></i></a></li>
-                                            <li class="quick-view"><a asp-controller="Shop" asp-action="DetailsProduct" asp-route-id="@product.Id">+ Quick View</a></li>
-                                        <li class="w-icon"><a href="#"><i class="fa fa-random"></i></a></li>
-                                    </ul>
-                                </div>                        
-                                <div class="pi-text">
-                                    <div class="catagory-name">@product.Category.Name</div>
-                                        <a asp-controller="Shop" asp-action="DetailsProduct" asp-route-id="@product.Id">
-                                        <h5>@product.Name</h5>
-                                    </a>
-                                    <div class="product-price">
-                                        @product.Price
-                                        <span>@product.Price</span>
+                            <div class="alert alert-info text-center my-4">Stay tuned! Currently we don't have published Products in our Shop</div>
+                        }
+                        else
+                        {
+                            @foreach (GetAllProductsViewModel product in Model.Products)
+                            {
+                                <div class="col-lg-4 col-sm-6">
+
+                                    <div class="product-item">
+                                        <div class="pi-pic">
+                                            <a asp-controller="Shop" asp-action="DetailsProduct" asp-route-id="@product.Id">
+                                                <img src="@product.ImageUrl" alt="">
+                                            </a>
+                                            <div class="sale pp-sale">Sale</div>
+                                            <div class="icon">
+                                                <i class="icon_heart_alt"></i>
+                                            </div>
+                                            <ul>
+                                                @if ((User?.Identity?.IsAuthenticated == true))
+                                                {
+                                                    <li class="w-icon active"><a href="#"><i class="icon_bag_alt"></i></a></li>
+                                                }
+                                                <li class="quick-view"><a asp-controller="Shop" asp-action="DetailsProduct" asp-route-id="@product.Id">+ Quick View</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="pi-text">
+                                            <div class="catagory-name">@product.Category.Name</div>
+                                            <a asp-controller="Shop" asp-action="DetailsProduct" asp-route-id="@product.Id">
+                                                <h5>@product.Name</h5>
+                                            </a>
+                                            <div class="product-price">
+                                                @product.Price
+                                                <span>@product.Price</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            
-                        </div>
+                            }
                         }
                     </div>
-
                 </div>
                 <div class="loading-more">
                     <i class="icon_loading"></i>
