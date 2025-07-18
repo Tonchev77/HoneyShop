@@ -1,6 +1,9 @@
 ﻿@using HoneyShop.ViewModels.Shop
 @model HoneyShop.ViewModels.Shop.ShopIndexViewModel
 
+@{
+    ViewData["Title"] = "Shop";
+}
 <!-- Breadcrumb Section Begin -->
 <div class="breacrumb-section">
     <div class="container">
@@ -99,7 +102,7 @@
                                                                 <i class="icon_bag_alt"></i>
                                                             </button>
                                                         </form>
-                                                    </li>
+                                                    </li> 
                                                 }
                                                 <li class="quick-view"><a asp-controller="Shop" asp-action="DetailsProduct" asp-route-id="@product.Id">+ Quick View</a></li>
                                             </ul>

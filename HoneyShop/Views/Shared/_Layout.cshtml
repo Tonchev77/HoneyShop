@@ -1,13 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-@* <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - HoneyShop</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/HoneyShop.styles.css" asp-append-version="true" /> 
-</head> *@
+
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Honey Shop">
@@ -67,28 +60,27 @@
                 <div class="row">
                     <div class="col-lg-2 col-md-2">
                         <div class="logo">
-                            <a href="./index.html">
+                            <a asp-controller="Home" asp-action="Index">
                                 <img src="~/img/logo.png" alt="">
                             </a>
                         </div>
                     </div>
                     <div class="col-lg-7 col-md-7">
-                        <div class="advanced-search">
-                            <button type="button" class="category-btn">All Categories</button>
-                            <div class="input-group">
-                                <input type="text" placeholder="What do you need?">
-                                <button type="button"><i class="ti-search"></i></button>
+                        <form asp-controller="Shop" asp-action="Index" method="get" class="advanced-search">
+                            <div class="search-box">
+                                <input type="text" name="searchString" class="search-input" placeholder="What do you need?" />
+                                <button type="submit" class="search-btn"><i class="ti-search"></i></button>
                             </div>
-                        </div>
+                        </form>
                     </div>
                     <div class="col-lg-3 text-right col-md-3">
                         <ul class="nav-right">
-                            <li class="heart-icon">
+                            @* <li class="heart-icon">
                                 <a href="#">
                                     <i class="icon_heart_alt"></i>
                                     <span>1</span>
                                 </a>
-                            </li>
+                            </li> *@
                             <li class="cart-icon">
                                 <a href="#">
                                     <i class="icon_bag_alt"></i>
@@ -147,16 +139,7 @@
                     <div class="depart-btn">
                         <i class="ti-menu"></i>
                         <span>All Categories</span>
-                        <ul class="depart-hover">
-                            <li class="active"><a href="#">Women’s Clothing</a></li>
-                            <li><a href="#">Men’s Clothing</a></li>
-                            <li><a href="#">Underwear</a></li>
-                            <li><a href="#">Kid's Clothing</a></li>
-                            <li><a href="#">Brand Fashion</a></li>
-                            <li><a href="#">Accessories/Shoes</a></li>
-                            <li><a href="#">Luxury Brands</a></li>
-                            <li><a href="#">Brand Outdoor Apparel</a></li>
-                        </ul> 
+                        @await Component.InvokeAsync("Categories")
                     </div>
                 </div>
                 <nav class="nav-menu mobile-menu">
@@ -171,29 +154,6 @@
         </div>
     </header>
 
-    @* <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">HoneyShop</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
-            </div>
-        </nav>
-    </header> *@
-  
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -204,7 +164,7 @@
                 <div class="col-lg-3">
                     <div class="footer-left">
                         <div class="footer-logo">
-                            <a href="#"><img src="~/img/footer-logo.png" alt=""></a>
+                            <a asp-controller="Home" asp-action="Index"><img src="~/img/footer-logo.png" alt=""></a>
                         </div>
                         <ul>
                             <li>Address: 8 Studentska 7000 Ruse</li>
@@ -255,14 +215,6 @@
             </div>
         </div>
     </footer>
-    @* <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - HoneyShop - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script> *@
 
     <!-- Js Plugins -->
     <script src="~/js/jquery-3.3.1.min.js"></script>

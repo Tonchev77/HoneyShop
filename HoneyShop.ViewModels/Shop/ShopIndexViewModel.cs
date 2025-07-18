@@ -5,5 +5,7 @@
     {
         public IEnumerable<GetAllProductsViewModel> Products { get; set; } = null!;
         public IEnumerable<GetAllCategoriesViewModel> Categories { get; set; } = null!;
+        public string? SearchString { get; set; }
+        public Guid? CategoryId { get; set; }
     }
 }

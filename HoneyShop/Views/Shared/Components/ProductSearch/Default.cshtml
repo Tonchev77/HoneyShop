@@ -1,0 +1,22 @@
+﻿@using HoneyShop.ViewModels.Shop
+@model IEnumerable<GetAllProductsViewModel>
+
+@if (!Model.Any())
+{
+    <p>No products found.</p>
+}
+else
+{
+    <ul>
+        @foreach (var product in Model)
+        {
+            <li>
+                <strong>@product.Name</strong> - @product.Price.ToString("C")
+                <br />
+                Category: @product.Category.Name
+                <br />
+                <img src="@product.ImageUrl" alt="@product.Name" style="max-width:100px;" />
+            </li>
+        }
+    </ul>
+}

@@ -1,23 +1,34 @@
 namespace HoneyShop.Controllers
 {
-    using System.Diagnostics;
     using HoneyShop.Models;
+    using HoneyShop.Services.Core.Contracts;
+    using HoneyShop.ViewModels.Shop;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using System.Diagnostics;
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IProductService productService;
+        private readonly ICategoryService categoryService;
+        public HomeController(ILogger<HomeController> logger, IProductService productService, ICategoryService categoryService)
         {
             _logger = logger;
+            this.productService = productService;
+            this.categoryService = categoryService;
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public  IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            ShopIndexViewModel viewModel = new ShopIndexViewModel
+            {
+                Products = await this.productService.GetProductsForHomeIndexAsync(),
+                Categories = await this.categoryService.GetAllCategoriesAsync()
+            };
+
+            return View(viewModel);
         }
 
         public IActionResult Privacy()
