@@ -34,19 +34,10 @@ namespace HoneyShop
             .AddEntityFrameworkStores<HoneyShopDbContext>();
             builder.Services.AddControllersWithViews();
 
-            //builder.Services.AddUserDefinedServices(typeof(ICategoryRepository).Assembly);
+            builder.Services.AddUserDefinedServices(typeof(IProductService).Assembly);
 
-            //builder.Services.AddRepositories(typeof(ICategoryRepository).Assembly);
+            builder.Services.AddRepositories(typeof(IProductRepository).Assembly);
 
-            builder.Services.AddScoped<IProductService, ProductService>();
-            builder.Services.AddScoped<ICategoryService, CategoryService>();
-            builder.Services.AddScoped<ICartService,CartService>();
-            builder.Services.AddScoped<ICategoriesViewComponentService, CategoriesViewComponentService>();
-
-            builder.Services.AddScoped<IProductRepository, ProductRepository>();
-            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-            builder.Services.AddScoped<ICartRepository, CartRepository>();
-            builder.Services.AddScoped<ICartsItemsRepository, CartsItemsRepository>();
 
             WebApplication app = builder.Build();
 

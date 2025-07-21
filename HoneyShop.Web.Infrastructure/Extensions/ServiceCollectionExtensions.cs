@@ -50,7 +50,6 @@
                     .FirstOrDefault(i => i.Name == $"{ProjectInterfacePrefix}{repositoryClass.Name}");
                 if (repositoryInterface == null)
                 {
-                    // Better solution, because it will throw an exception during application start-up
                     throw new ArgumentException(string.Format(InterfaceNotFoundMessage, repositoryClass.Name));
                 }
 
