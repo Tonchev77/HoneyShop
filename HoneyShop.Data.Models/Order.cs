@@ -11,7 +11,7 @@
 
         [Comment("Identifier of the user who placed the order")]
         public string UserId { get; set; } = null!;
-        public IdentityUser User { get; set; } = null!;
+        public ApplicationUser User { get; set; } = null!;
 
         [Comment("Shows the date of ordering the product")]
         public DateTime OrderDate { get; set; }

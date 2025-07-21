@@ -14,9 +14,9 @@
         private readonly ICartRepository cartRepository;
         private readonly ICartsItemsRepository cartsItemsRepository;
         private readonly IProductRepository productRepository;
-        private readonly UserManager<IdentityUser> userManager;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public CartService(ICartRepository cartRepository, ICartsItemsRepository cartsItemsRepository, UserManager<IdentityUser> userManager,
+        public CartService(ICartRepository cartRepository, ICartsItemsRepository cartsItemsRepository, UserManager<ApplicationUser> userManager,
             IProductRepository productRepository)
         {
             this.cartRepository = cartRepository;
@@ -30,7 +30,7 @@
             bool opResult = false;
 
             // Find user
-            IdentityUser? user = await this.userManager.FindByIdAsync(userId);
+            ApplicationUser? user = await this.userManager.FindByIdAsync(userId);
 
             // Find product
             Product? productToAdd = await this.productRepository

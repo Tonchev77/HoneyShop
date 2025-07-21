@@ -11,7 +11,7 @@
 
         [Comment("User identifier")]
         public string UserId { get; set; } = null!;
-        public virtual IdentityUser User { get; set; } = null!;
+        public virtual ApplicationUser User { get; set; } = null!;
         public virtual ICollection<CartItem> Items { get; set; }
             = new HashSet<CartItem>();
 

@@ -5,7 +5,7 @@
     using Microsoft.EntityFrameworkCore;
     using System.Reflection;
 
-    public class HoneyShopDbContext : IdentityDbContext
+    public class HoneyShopDbContext : IdentityDbContext<ApplicationUser>
     {
         public HoneyShopDbContext(DbContextOptions<HoneyShopDbContext> options)
             : base(options)

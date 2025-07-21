@@ -27,7 +27,7 @@
 
         [Comment("Identifier of the user who created the product")]
         public string CreatorId { get; set; } = null!;
-        public virtual IdentityUser Creator { get; set; } = null!;
+        public virtual ApplicationUser Creator { get; set; } = null!;
 
         [Comment("Shows the date of creating the product")]
         public DateTime CreatedAt { get; set; }

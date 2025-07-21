@@ -1,11 +1,11 @@
 namespace HoneyShop
 {
     using HoneyShop.Data;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.EntityFrameworkCore;
-    using HoneyShop.Web.Infrastructure.Extensions;
+    using HoneyShop.Data.Models;
     using HoneyShop.Data.Repository.Interfaces;
     using HoneyShop.Services.Core.Contracts;
+    using HoneyShop.Web.Infrastructure.Extensions;
+    using Microsoft.EntityFrameworkCore;
 
 
     public class Program
@@ -22,7 +22,7 @@ namespace HoneyShop
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.Password.RequireNonAlphanumeric = false;
@@ -63,6 +63,9 @@ namespace HoneyShop
             app.UseAuthorization();
             app.UseManagerAccessRestriction();
 
+            app.MapControllerRoute(
+                name: "areas",
+                pattern: "{area}/{controller=Home}/{action=Index}/{id?}");
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
