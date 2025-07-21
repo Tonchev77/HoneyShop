@@ -15,6 +15,13 @@
                 .HasDefaultValue(false);
 
             entity
+                .HasOne(m => m.User)
+                .WithOne(u => u.Manager)
+                .HasForeignKey<Manager>(m => m.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            entity
                 .HasIndex(m => new { m.UserId })
                 .IsUnique();
 

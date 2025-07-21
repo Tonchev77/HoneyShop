@@ -12,6 +12,7 @@
 
         [Comment("Manager's user entity")]
         public string UserId { get; set; } = null!;
+        public virtual ApplicationUser User { get; set; } = null!;
 
         public virtual ICollection<Product> Products { get; set; } 
             = new HashSet<Product>();
