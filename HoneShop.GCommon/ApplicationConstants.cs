@@ -5,5 +5,7 @@
         public static string DateFormat = "dd-MM-yyyy";
 
         public const string IsDeletedPropertyName = "IsDeleted";
+
+        public const string ManagerAuthCookie = "ManagerAuth";
     }
 }

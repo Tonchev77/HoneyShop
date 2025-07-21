@@ -6,8 +6,7 @@ namespace HoneyShop
     using HoneyShop.Web.Infrastructure.Extensions;
     using HoneyShop.Data.Repository.Interfaces;
     using HoneyShop.Services.Core.Contracts;
-    using HoneyShop.Services.Core;
-    using HoneyShop.Data.Repository;
+
 
     public class Program
     {
@@ -62,6 +61,7 @@ namespace HoneyShop
 
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseManagerAccessRestriction();
 
             app.MapControllerRoute(
                 name: "default",

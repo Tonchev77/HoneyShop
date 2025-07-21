@@ -24,6 +24,7 @@
         public virtual DbSet<Warehouse> Warehouses { get; set; } = null!;
         public virtual DbSet<OrderStatus> OrderStatuses { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
+        public virtual DbSet<Manager> Managers { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

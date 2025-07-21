@@ -19,6 +19,7 @@
 
         [Comment("Shows the date of deleting the warehouse")]
         public DateTime? DeletedAt { get; set; }
+        public Guid? ManagerId { get; set; }
         public virtual ICollection<ProductStock> ProductStocks { get; set; }
             = new HashSet<ProductStock>();
     }

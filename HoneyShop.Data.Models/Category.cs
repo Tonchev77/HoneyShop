@@ -19,6 +19,8 @@
 
         [Comment("Shows the date of deleting the category")]
         public DateTime? DateleteAt { get; set; }
+
+        public Guid? ManagerId { get; set; }
         public virtual ICollection<Product> Products { get; set; }
             = new HashSet<Product>();
     }

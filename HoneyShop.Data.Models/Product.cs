@@ -40,6 +40,8 @@
 
         [Comment("Shows the date of deleting the product")]
         public DateTime? DeletedAt { get; set; }
+
+        public Guid? ManagerId { get; set; }
         public virtual ICollection<ProductStock> ProductStocks { get; set; }
             = new HashSet<ProductStock>();
         public virtual ICollection<ProductPromotion> ProductPromotions { get; set; }

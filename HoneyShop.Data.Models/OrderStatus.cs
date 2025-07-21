@@ -19,6 +19,7 @@
 
         [Comment("Shows the date of deleting the status")]
         public DateTime? DateleteAt { get; set; }
+        public Guid? ManagerId { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
             = new HashSet<Order>();
