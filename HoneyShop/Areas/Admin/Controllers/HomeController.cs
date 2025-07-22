@@ -1,7 +1,7 @@
 ﻿namespace HoneyShop.Areas.Admin.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    public class HomeController : Controller
+    public class HomeController : BaseAdminController
     {
         public IActionResult Index()
         {

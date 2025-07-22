@@ -3,8 +3,11 @@ namespace HoneyShop
     using HoneyShop.Data;
     using HoneyShop.Data.Models;
     using HoneyShop.Data.Repository.Interfaces;
+    using HoneyShop.Data.Seeding;
+    using HoneyShop.Data.Seeding.Interfaces;
     using HoneyShop.Services.Core.Contracts;
     using HoneyShop.Web.Infrastructure.Extensions;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
 
 
@@ -30,12 +33,14 @@ namespace HoneyShop
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
             })
+            .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<HoneyShopDbContext>();
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddUserDefinedServices(typeof(IProductService).Assembly);
-
             builder.Services.AddRepositories(typeof(IProductRepository).Assembly);
+
+            builder.Services.AddTransient<IIdentitySeeder, IdentitySeeder>();
 
 
             WebApplication app = builder.Build();
@@ -58,6 +63,8 @@ namespace HoneyShop
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.SeedDefaultIdentity();
 
             app.UseAuthentication();
             app.UseAuthorization();

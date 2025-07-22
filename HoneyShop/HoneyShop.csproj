@@ -8,6 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Admin\Content\**" />
+    <Compile Remove="Areas\Admin\Scripts\**" />
+    <Content Remove="Areas\Admin\Content\**" />
+    <Content Remove="Areas\Admin\Scripts\**" />
+    <EmbeddedResource Remove="Areas\Admin\Content\**" />
+    <EmbeddedResource Remove="Areas\Admin\Scripts\**" />
+    <None Remove="Areas\Admin\Content\**" />
+    <None Remove="Areas\Admin\Scripts\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.17" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.17" />
