@@ -1,0 +1,96 @@
+﻿@using HoneyShop.ViewModels.Admin.UserManagement
+@using Microsoft.AspNetCore.Identity
+@model UserManagementIndexViewModel
+
+@inject RoleManager<IdentityRole> roleManager;
+
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+<div class="card card-info card-outline mb-4">
+    <!--begin::Header-->
+    <div class="card-header">
+        <div class="card-title">Edit User - @Model.Email</div>
+    </div>
+    <!--end::Header-->
+    <!--begin::Form-->
+    <form sp-area="Admin" asp-controller="UserManagement" asp-action="Update" method="post" class="needs-validation" novalidate>
+        <!--begin::Body-->
+        <div class="card-body">
+            <!--begin::Row-->
+            <div class="row g-3">
+                <!--begin::Col-->
+                <div class="col-md-6">
+                    <label for="validationCustomUsername" class="form-label">
+                        @Model.Email
+                        <span class="required-indicator sr-only"> (required)</span>
+                    </label>
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <div class="input-group has-validation">
+                        <span class="input-group-text" id="inputGroupPrepend">@@</span>
+                        <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required value="@Model.Email" readonly>
+                    </div>
+                </div>
+                <!--end::Col-->
+                <!--begin::Col-->
+                <div class="col-md-6">
+                    <label for="validationCustom04" class="form-label">
+                        Roles
+                        <span class="required-indicator sr-only"> (required)</span>
+                    </label>
+                    <select class="form-select" id="validationCustom04" name="newRoles" required>
+                        @foreach (IdentityRole role in roleManager.Roles.ToList())
+                        {
+                            <option value="@role.Name" selected="@(Model.Roles.Contains(role.Name) ? "selected" : null)">@role.Name</option>
+                        }
+                    </select>
+                    <div class="invalid-feedback">
+                        Please select a role.
+                    </div>
+                </div>
+                <!--end::Col-->
+            </div>
+            <!--end::Row-->
+        </div>
+        <!--end::Body-->
+        <!--begin::Footer-->
+        <div class="card-footer">
+            <button class="btn btn-success" type="submit"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+            <a asp-controller="UserManagement" asp-action="Index"
+               class="btn btn-danger">
+                <i class="fa-solid fa-arrow-left"></i>
+                Cancel
+            </a>
+        </div>
+        <!--end::Footer-->
+    </form>
+    <!--end::Form-->
+    <!--begin::JavaScript-->
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (() => {
+            'use strict';
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            const forms = document.querySelectorAll('.needs-validation');
+
+            // Loop over them and prevent submission
+            Array.from(forms).forEach(form => {
+                form.addEventListener(
+                    'submit',
+                    event => {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+
+                        form.classList.add('was-validated');
+                    },
+                    false
+                );
+            });
+        })();
+    </script>
+    <!--end::JavaScript-->
+</div>
