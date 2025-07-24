@@ -9,6 +9,7 @@
 
         Task<bool> PersistUpdateUserRoleAsync(string userId, string newRoles);
 
+        //TODO
         Task<bool> SoftDeleteUserAsync(string userId, UserManagementIndexViewModel inputModel);
     }
 }

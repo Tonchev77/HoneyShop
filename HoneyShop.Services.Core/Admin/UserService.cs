@@ -77,5 +77,11 @@
             IdentityResult addResult = await this.userManager.AddToRoleAsync(user, newRoles);
             return addResult.Succeeded;
         }
+
+        //TODO
+        public Task<bool> SoftDeleteUserAsync(string userId, UserManagementIndexViewModel inputModel)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
