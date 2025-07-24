@@ -4,7 +4,9 @@
     using HoneyShop.Data.Repository.Interfaces;
     using HoneyShop.Services.Core.Admin.Contracts;
     using HoneyShop.ViewModels.Admin.CategoryManagment;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+    using System.Globalization;
 
     public class CategoryService : ICategoryService
     {
@@ -13,6 +15,27 @@
         public CategoryService(ICategoryRepository categoryRepository)
         {
             this.categoryRepository = categoryRepository;
+        }
+
+        public async Task<bool> AddCategoryAsync(AddCategoryViewModel inputModel)
+        {
+            bool opResult = false;
+
+            if (inputModel != null)
+            {
+                Category newCategory = new Category()
+                {
+                    Name = inputModel.Name,
+                    Description = inputModel.Description,
+                };
+
+                await this.categoryRepository.AddAsync(newCategory);
+                await this.categoryRepository.SaveChangesAsync();
+
+                opResult = true;
+            }
+
+            return opResult;
         }
 
         public async Task<IEnumerable<CategoryManagmentIndexViewModel>> GetAllCategoriesAsync()

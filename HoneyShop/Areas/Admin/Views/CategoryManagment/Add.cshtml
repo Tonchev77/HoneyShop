@@ -1,0 +1,81 @@
+﻿@using HoneyShop.ViewModels.Admin.CategoryManagment
+@model AddCategoryViewModel
+
+@{
+    ViewData["Title"] = "Add Category";
+}
+<div class="card card-info card-outline mb-4">
+    <!--begin::Header-->
+    <div class="card-header">
+        <div class="card-title">Add New Category</div>
+    </div>
+    <!--end::Header-->
+
+    <!--begin::Form-->
+    <form asp-controller="CategoryManagment" asp-action="Add" method="post" class="needs-validation" novalidate>
+        <!--begin::Body-->
+        <div class="card-body">
+            <!--begin::Row-->
+            <div class="row g-3">
+                <!--begin::Col-->
+                <div class="col-md-6">
+                    <label for="validationCustom01" class="form-label">
+                        Category Name
+                        <span class="required-indicator sr-only"> (required)</span>
+                    </label>
+                    <input asp-for="@Model.Name" type="text" class="form-control" id="validationCustom01" placeholder="Enter Category Name" required>
+                    <div class="valid-feedback">Looks good!</div>
+                </div>
+                <!--end::Col-->
+
+                <!--begin::Col-->
+                <div class="col-md-6">
+                    <label for="validationCustom02" class="form-label">
+                        Category Description
+                        <span class="required-indicator sr-only"> (required)</span>
+                    </label>
+                    <input asp-for="@Model.Description" type="text" class="form-control" id="validationCustom02" placeholder="Enter Category Description" required>
+                    <div class="valid-feedback">Looks good!</div>
+                </div>
+                <!--end::Col-->
+        <!--begin::Footer-->
+                <div class="card-footer">
+                    <button class="btn btn-success" type="submit"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                    <a asp-controller="CategoryManagment" asp-action="Index"
+                       class="btn btn-danger">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Cancel
+                    </a>
+                </div>
+        <!--end::Footer-->
+    </form>
+    <!--end::Form-->
+
+    <!--begin::JavaScript-->
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (() => {
+            'use strict';
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            const forms = document.querySelectorAll('.needs-validation');
+
+            // Loop over them and prevent submission
+            Array.from(forms).forEach(form => {
+                form.addEventListener(
+                    'submit',
+                    event => {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+
+                        form.classList.add('was-validated');
+                    },
+                    false
+                );
+            });
+        })();
+    </script>
+    <!--end::JavaScript-->
+</div>
