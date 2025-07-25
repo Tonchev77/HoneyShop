@@ -9,10 +9,13 @@
     public class UserService : IUserService
     {
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly RoleManager<IdentityRole> roleManager;
 
-        public UserService(UserManager<ApplicationUser> userManager)
+
+        public UserService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
+            this.roleManager = roleManager;
         }
 
         public async Task<UserManagementIndexViewModel?> GetUserForEditingAsync(string userId)
@@ -27,7 +30,7 @@
                 userForEdit = new UserManagementIndexViewModel
                 {
                     Id = user.Id,
-                    Email = user.Email,
+                    Email = user.Email!,
                     Roles = await this.userManager.GetRolesAsync(user)
                 };
             }
@@ -43,7 +46,7 @@
                 .Select(u => new UserManagementIndexViewModel
                 {
                     Id = u.Id,
-                    Email = u.Email,
+                    Email = u.Email!,
                     Roles = userManager.GetRolesAsync(u)
                         .GetAwaiter()
                         .GetResult()
@@ -64,8 +67,15 @@
                 return false;
             }
 
-            IList<string> currentRoles = await this.userManager.GetRolesAsync(user);
+            
+            bool roleExists = await this.roleManager.RoleExistsAsync(newRoles);
 
+            if (!roleExists) 
+            {
+                return false;
+            }
+
+            IList<string> currentRoles = await this.userManager.GetRolesAsync(user);
             // Remove all current roles
             IdentityResult removeResult = await this.userManager.RemoveFromRolesAsync(user, currentRoles);
             if (!removeResult.Succeeded)
