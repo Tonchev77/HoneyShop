@@ -81,5 +81,59 @@
 
             return allProducts;
         }
+
+        public async Task<EditProductManagmentViewModel?> GetProductForEditingAsync(Guid? productId)
+        {
+            EditProductManagmentViewModel? editModel = null;
+
+            if (productId != null)
+            {
+                Product? editProductModel = await this.productRepository
+                    .SingleOrDefaultAsync(r => r.Id == productId);
+
+                if (editProductModel != null)    
+                {
+                    editModel = new EditProductManagmentViewModel()
+                    {
+                        Id = editProductModel.Id,
+                        Name = editProductModel.Name,
+                        Description = editProductModel.Description,
+                        Price = editProductModel.Price,
+                        ImageUrl = editProductModel.ImageUrl,
+                        IsActive = editProductModel.IsActive,
+                        CategoryId = editProductModel.CategoryId,
+                    };
+                }
+            }
+
+            return editModel;
+        }
+
+        public async Task<bool> PersistUpdateProductAsync(EditProductManagmentViewModel inputModel)
+        {
+            bool opResult = false;
+
+            Product? updatedProduct = await this.productRepository
+                .FirstOrDefaultAsync(c => c.Id == inputModel.Id);
+
+
+            if (updatedProduct != null)
+            {
+                updatedProduct.Id = inputModel.Id;
+                updatedProduct.Name = inputModel.Name;
+                updatedProduct.Description = inputModel.Description;
+                updatedProduct.Price = inputModel.Price;
+                updatedProduct.ImageUrl = inputModel.ImageUrl;
+                updatedProduct.IsActive = inputModel.IsActive;
+                updatedProduct.CategoryId = inputModel.CategoryId;
+
+
+                await this.productRepository.SaveChangesAsync();
+
+                opResult = true;
+            }
+
+            return opResult;
+        }
     }
 }

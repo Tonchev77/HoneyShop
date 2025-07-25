@@ -6,5 +6,9 @@
         Task<IEnumerable<ProductManagmentIndexViewModel>> GetAllProductsAsync();
 
         Task<bool> AddProductAsync(string userId, AddProductViewModel inputModel);
+
+        Task<EditProductManagmentViewModel?> GetProductForEditingAsync(Guid? productId);
+
+        Task<bool> PersistUpdateProductAsync(EditProductManagmentViewModel inputModel);
     }
 }

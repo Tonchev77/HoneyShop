@@ -4,9 +4,10 @@
     using System.ComponentModel.DataAnnotations;
 
     using static HoneyShop.GCommon.ValidationConstants.Product;
-
-    public class AddProductViewModel
+    public class EditProductManagmentViewModel
     {
+        public Guid Id { get; set; }
+
         [Required]
         [MinLength(NameMinLength, ErrorMessage = NameMinLengthMessage)]
         [MaxLength(NameMaxLength, ErrorMessage = NameMinLengthMessage)]
@@ -26,9 +27,6 @@
         [Required]
         [MaxLength(ImageUrlMaxLength, ErrorMessage = ImageUrlMaxLengthMessage)]
         public string ImageUrl { get; set; } = null!;
-
-        [Required]
-        public DateTime CreatedAt { get; set; }
 
         [Required]
         public bool IsActive { get; set; }
