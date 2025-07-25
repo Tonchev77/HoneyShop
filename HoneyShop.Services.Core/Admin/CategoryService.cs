@@ -6,7 +6,6 @@
     using HoneyShop.ViewModels.Admin.CategoryManagment;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
-    using System.Globalization;
 
     public class CategoryService : ICategoryService
     {
@@ -36,6 +35,29 @@
             }
 
             return opResult;
+        }
+
+        public async Task<DeleteCategoryManagmentViewModel?> GetCategoryForDeleteAsync(Guid? categoryId)
+        {
+            DeleteCategoryManagmentViewModel? deleteModel = null;
+
+            if (categoryId != null)
+            {
+                Category? deleteCategoryModel = await this.categoryRepository
+                    .SingleOrDefaultAsync(c => c.Id == categoryId);
+
+                if (deleteCategoryModel != null)
+                { 
+                    deleteModel = new DeleteCategoryManagmentViewModel()
+                    {
+                        Id = deleteCategoryModel.Id,
+                        Name = deleteCategoryModel.Name,
+                        Description = deleteCategoryModel.Description ?? string.Empty
+                    };
+                }
+            }
+
+            return deleteModel;
         }
 
         public async Task<IEnumerable<CategoryManagmentIndexViewModel>> GetAllCategoriesAsync()
@@ -95,6 +117,25 @@
                 updatedCategory.Name = inputModel.Name;
                 updatedCategory.Description = inputModel.Description;
 
+
+                await this.categoryRepository.SaveChangesAsync();
+
+                opResult = true;
+            }
+
+            return opResult;
+        }
+
+        public async Task<bool> SoftDeleteCategoryAsync(DeleteCategoryManagmentViewModel inputModel)
+        {
+            bool opResult = false;
+
+            Category? deletedCategory = await this.categoryRepository
+                .FirstOrDefaultAsync(c => c.Id == inputModel.Id);
+
+            if (deletedCategory != null)
+            {
+                deletedCategory.IsDeleted = true;
 
                 await this.categoryRepository.SaveChangesAsync();
 

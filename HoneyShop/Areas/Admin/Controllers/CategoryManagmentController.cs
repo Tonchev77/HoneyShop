@@ -38,6 +38,7 @@
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                TempData[ErrorMessageKey] = CategoryFatalError;
                 return this.RedirectToAction(nameof(Index));
             }
         }
@@ -53,15 +54,18 @@
 
                 if (addResult == false)
                 {
-                    ModelState.AddModelError(string.Empty, "Fatal error occured while adding a category!");
+                    TempData[ErrorMessageKey] = CategoryEditError;
+                    ModelState.AddModelError(string.Empty, CategoryEditError);
                     return this.View(inputModel);
                 }
 
+                TempData[SuccessMessageKey] = CategoryAddedSuccessfully;
                 return this.RedirectToAction(nameof(Index));
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                TempData[ErrorMessageKey] = CategoryFatalError;
                 return this.RedirectToAction(nameof(Index));
             }
         }
@@ -77,6 +81,7 @@
 
                 if (editInputModel == null)
                 {
+                    TempData[ErrorMessageKey] = CategoryNotFound;
                     return this.RedirectToAction(nameof(Index));
                 }
 
@@ -86,6 +91,7 @@
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                TempData[ErrorMessageKey] = CategoryFatalError;
                 return this.RedirectToAction(nameof(Index));
             }
         }
@@ -106,8 +112,8 @@
                 if (editResult == false)
                 {
 
-                    TempData[ErrorMessageKey] = CategoryError;
-                    this.ModelState.AddModelError(string.Empty, CategoryError);
+                    TempData[ErrorMessageKey] = CategoryEditError;
+                    this.ModelState.AddModelError(string.Empty, CategoryEditError);
                     return this.View(inputModel);
                 }
                 TempData[SuccessMessageKey] = CategoryEditedSuccessfully;
@@ -116,9 +122,69 @@
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                TempData[ErrorMessageKey] = CategoryError;
+                TempData[ErrorMessageKey] = CategoryFatalError;
                 return this.RedirectToAction(nameof(Index));
 
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid? categoryId)
+        {
+            try
+            {
+                DeleteCategoryManagmentViewModel? deleteInputModel = await this.categoryService
+                    .GetCategoryForDeleteAsync(categoryId);
+
+                if (deleteInputModel == null)
+                {
+                    TempData[ErrorMessageKey] = CategoryNotFound;
+                    return this.RedirectToAction(nameof(Index));
+                }
+
+                return this.View(deleteInputModel);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                TempData[ErrorMessageKey] = CategoryFatalError;
+                return this.RedirectToAction(nameof(Index));
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ConfirmDelete(DeleteCategoryManagmentViewModel inputModel)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    TempData[ErrorMessageKey] = CategoryDeletedError;
+                    ModelState.AddModelError(string.Empty, CategoryDeletedError);
+
+                    return this.View(inputModel);
+                }
+
+                bool deleteResult = await this.categoryService.SoftDeleteCategoryAsync(inputModel);
+
+                if (deleteResult == false)
+                {
+                    TempData[ErrorMessageKey] = CategoryDeletedError;
+                    this.ModelState.AddModelError(string.Empty, CategoryDeletedError);
+
+                    return this.View(inputModel);
+                }
+                
+                TempData[SuccessMessageKey] = CategoryDeletedSuccessfully;
+                return this.RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                TempData[ErrorMessageKey] = CategoryFatalError;
+
+                return this.RedirectToAction(nameof(Index));
             }
         }
     }

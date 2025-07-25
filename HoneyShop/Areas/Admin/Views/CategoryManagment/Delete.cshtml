@@ -1,8 +1,8 @@
 ﻿@using HoneyShop.ViewModels.Admin.CategoryManagment
-@model AddCategoryViewModel
+@model DeleteCategoryManagmentViewModel
 
 @{
-    ViewData["Title"] = "Add Category";
+    ViewData["Title"] = "Delete Category";
 }
 <div class="card card-info card-outline mb-4">
     <!--begin::Header-->
@@ -10,40 +10,33 @@
         <div class="card-title">Add New Category</div>
     </div>
     <!--end::Header-->
-
     <!--begin::Form-->
-    <form asp-controller="CategoryManagment" asp-action="Add" method="post" class="needs-validation" novalidate>
+    <form asp-controller="CategoryManagment" asp-action="ConfirmDelete" method="post" class="needs-validation" novalidate>
         <!--begin::Body-->
         <div class="card-body">
-            <!-- Validation summary for model errors -->
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
             <!--begin::Row-->
             <div class="row g-3">
                 <!--begin::Col-->
                 <div class="col-md-6">
-                    <label for="validationCustom01" class="form-label">
+                    <label class="form-label">
                         Category Name
                         <span class="required-indicator sr-only"> (required)</span>
                     </label>
-                    <input asp-for="Name" type="text" class="form-control" id="validationCustom01" required>
-                    <span asp-validation-for="Name" class="text-danger"></span>
+                    <input type="hidden" asp-for="Id" />
+                    <input asp-for="Name" type="text" class="form-control-plaintext" id="validationCustom01" readonly tabindex="-1" style="background-color: #f8f9fa;" />
                 </div>
-                <!--end::Col-->
-                <!--begin::Col-->
                 <div class="col-md-6">
-                    <label for="validationCustom02" class="form-label">
+                    <label class="form-label">
                         Category Description
                         <span class="required-indicator sr-only"> (required)</span>
                     </label>
-                    <input asp-for="Description" type="text" class="form-control" id="validationCustom02" required>
-                    <span asp-validation-for="Description" class="text-danger"></span>
+                    <input asp-for="Description" type="text" class="form-control-plaintext" id="validationCustom02" readonly tabindex="-1" style="background-color: #f8f9fa;" />
                 </div>
-                <!--end::Col-->
                 <!--begin::Footer-->
                 <div class="card-footer">
-                    <button class="btn btn-success" type="submit"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                    <button class="btn btn-danger" type="submit"><i class="fa-solid fa-trash-can"></i> Delete</button>
                     <a asp-controller="CategoryManagment" asp-action="Index"
-                       class="btn btn-danger">
+                       class="btn btn-primary">
                         <i class="fa-solid fa-arrow-left"></i>
                         Cancel
                     </a>
@@ -53,11 +46,7 @@
         <!--end::Footer-->
     </form>
     <!--end::Form-->
-
     <!--begin::JavaScript-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
     <script>
         // Example starter JavaScript for disabling form submissions if there are invalid fields
         (() => {

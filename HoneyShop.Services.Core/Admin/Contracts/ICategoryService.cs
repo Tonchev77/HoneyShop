@@ -10,5 +10,9 @@
         Task<EditCategoryManagmentViewModel?> GetCategoryForEditingAsync(Guid? categoryId);
 
         Task<bool> PersistUpdateCategoryAsync(EditCategoryManagmentViewModel inputModel);
+
+        Task<DeleteCategoryManagmentViewModel?> GetCategoryForDeleteAsync(Guid? categoryId);
+
+        Task<bool> SoftDeleteCategoryAsync(DeleteCategoryManagmentViewModel inputModel);
     }
 }

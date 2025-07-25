@@ -42,14 +42,14 @@
                             <div class="d-flex gap-2">
                                 <a asp-controller="CategoryManagment" asp-action="Edit" asp-route-categoryId="@category.Id"
                                    class="btn btn-primary mb-0 d-flex align-items-center">
-                                    <i class="fa-solid fa-user-pen me-1"></i>
+                                    <i class="fa-solid fa-pen-to-square"></i>
                                     Edit
                                 </a>
-                                <button type="button" class="btn btn-danger mb-0 d-flex align-items-center"
-                                        asp-controller="CategoryManagment" asp-action="Delete" asp-route-id="@category.Id">
+                                <a asp-controller="CategoryManagment" asp-action="Delete" asp-route-categoryId="@category.Id"
+                                   class="btn btn-danger mb-0 d-flex align-items-center">
                                     <i class="fa-solid fa-trash-can me-1"></i>
                                     Delete
-                                </button>
+                                </a> 
                             </div>
                         </td>
                     </tr>
