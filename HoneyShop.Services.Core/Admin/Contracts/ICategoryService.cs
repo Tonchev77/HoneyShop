@@ -6,5 +6,9 @@
         Task<IEnumerable<CategoryManagmentIndexViewModel>> GetAllCategoriesAsync();
 
         Task<bool> AddCategoryAsync(AddCategoryViewModel inputModel);
+
+        Task<EditCategoryManagmentViewModel?> GetCategoryForEditingAsync(Guid? categoryId);
+
+        Task<bool> PersistUpdateCategoryAsync(EditCategoryManagmentViewModel inputModel);
     }
 }

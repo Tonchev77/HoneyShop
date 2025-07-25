@@ -40,13 +40,13 @@
                         <td>@category.Description</td>
                         <td>
                             <div class="d-flex gap-2">
-                                <a @* asp-controller="UserManagement" asp-action="Edit" asp-route-id="@user.Id" *@
+                                <a asp-controller="CategoryManagment" asp-action="Edit" asp-route-categoryId="@category.Id"
                                    class="btn btn-primary mb-0 d-flex align-items-center">
                                     <i class="fa-solid fa-user-pen me-1"></i>
                                     Edit
                                 </a>
                                 <button type="button" class="btn btn-danger mb-0 d-flex align-items-center"
-                                       @*  asp-controller="UserManagement" asp-action="Delete" asp-route-id="@user.Id" *@>
+                                        asp-controller="CategoryManagment" asp-action="Delete" asp-route-id="@category.Id">
                                     <i class="fa-solid fa-trash-can me-1"></i>
                                     Delete
                                 </button>

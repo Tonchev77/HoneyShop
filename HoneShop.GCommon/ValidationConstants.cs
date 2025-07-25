@@ -57,7 +57,12 @@
             public const int NameMaxLength = 30;
             public const int NameMinLength = 4;
 
+            public const string NameMinLengthMessage = "Category name must be at least 4 characters long.";
+            public const string NameMaxLengthMessage = "Category name must be at most 30 characters long.";
+
             public const int DescriptionMaxLength = 200;
+
+            public const string DescriptionMaxLengthMessage = "Category description must be at most 200 characters long.";
 
         }
     }

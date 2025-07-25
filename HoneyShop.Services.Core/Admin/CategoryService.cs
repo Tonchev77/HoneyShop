@@ -56,5 +56,52 @@
             return allCategories;
 
         }
+
+        public async Task<EditCategoryManagmentViewModel?> GetCategoryForEditingAsync(Guid? categoryId)
+        {
+            EditCategoryManagmentViewModel? editModel = null;
+
+            if (categoryId != null)
+            {
+                Category? editCategoryModel = await this.categoryRepository
+                    .GetAllAttached()
+                    .SingleOrDefaultAsync(c => c.Id == categoryId);
+
+                if (editCategoryModel != null) 
+                {
+                    editModel = new EditCategoryManagmentViewModel()
+                    {
+                       Id = editCategoryModel.Id,
+                       Name = editCategoryModel.Name,
+                       Description = editCategoryModel.Description ?? string.Empty,
+                    };
+                }
+            }
+
+            return editModel;
+        }
+
+        public async Task<bool> PersistUpdateCategoryAsync(EditCategoryManagmentViewModel inputModel)
+        {
+            bool opResult = false;
+
+            Category? updatedCategory = await this.categoryRepository
+                .FirstOrDefaultAsync(c => c.Id == inputModel.Id);
+
+
+            if (updatedCategory != null) 
+            {
+                updatedCategory.Id = inputModel.Id;
+                updatedCategory.Name = inputModel.Name;
+                updatedCategory.Description = inputModel.Description;
+
+
+                await this.categoryRepository.SaveChangesAsync();
+
+                opResult = true;
+            }
+
+            return opResult;
+        }
     }
 }
