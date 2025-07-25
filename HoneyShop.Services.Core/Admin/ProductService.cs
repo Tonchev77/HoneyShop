@@ -3,6 +3,7 @@
     using HoneyShop.Data.Models;
     using HoneyShop.Data.Repository.Interfaces;
     using HoneyShop.Services.Core.Admin.Contracts;
+    using HoneyShop.ViewModels.Admin.CategoryManagment;
     using HoneyShop.ViewModels.Admin.ProductManagment;
     using HoneyShop.ViewModels.Home;
     using Microsoft.AspNetCore.Identity;
@@ -82,6 +83,32 @@
             return allProducts;
         }
 
+        public async Task<DeleteProductManagmentViewModel?> GetProductForDeleteAsync(Guid? productId)
+        {
+            DeleteProductManagmentViewModel? deleteModel = null;
+
+            if (productId != null)
+            {
+                Product? deleteProductModel = await this.productRepository
+                    .SingleOrDefaultAsync(c => c.Id == productId);
+
+                if (deleteProductModel != null)
+                {
+                    deleteModel = new DeleteProductManagmentViewModel()
+                    {
+                        Id = deleteProductModel.Id,
+                        Name = deleteProductModel.Name,
+                        Description = deleteProductModel.Description ?? string.Empty,
+                        Price = deleteProductModel.Price,
+                        ImageUrl = deleteProductModel.ImageUrl,
+                        IsActive = deleteProductModel.IsActive,
+                    };
+                }
+            }
+
+            return deleteModel;
+        }
+
         public async Task<EditProductManagmentViewModel?> GetProductForEditingAsync(Guid? productId)
         {
             EditProductManagmentViewModel? editModel = null;
@@ -127,6 +154,25 @@
                 updatedProduct.IsActive = inputModel.IsActive;
                 updatedProduct.CategoryId = inputModel.CategoryId;
 
+
+                await this.productRepository.SaveChangesAsync();
+
+                opResult = true;
+            }
+
+            return opResult;
+        }
+
+        public async Task<bool> SoftDeleteProductAsync(DeleteProductManagmentViewModel inputModel)
+        {
+            bool opResult = false;
+
+            Product? deletedProduct = await this.productRepository
+                .FirstOrDefaultAsync(c => c.Id == inputModel.Id);
+
+            if (deletedProduct != null)
+            {
+                deletedProduct.IsDeleted = true;
 
                 await this.productRepository.SaveChangesAsync();
 

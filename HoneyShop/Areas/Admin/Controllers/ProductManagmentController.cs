@@ -154,5 +154,65 @@
 
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid? productId)
+        {
+            try
+            {
+                DeleteProductManagmentViewModel? deleteInputModel = await this.productService
+                    .GetProductForDeleteAsync(productId);
+
+                if (deleteInputModel == null)
+                {
+                    TempData[ErrorMessageKey] = ProductNotFound;
+                    return this.RedirectToAction(nameof(Index));
+                }
+
+                return this.View(deleteInputModel);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                TempData[ErrorMessageKey] = ProductFatalError;
+                return this.RedirectToAction(nameof(Index));
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ConfirmDelete(DeleteProductManagmentViewModel inputModel)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    TempData[ErrorMessageKey] = ProductDeletedError;
+                    ModelState.AddModelError(string.Empty, ProductDeletedError);
+
+                    return this.View(inputModel);
+                }
+
+                bool deleteResult = await this.productService.SoftDeleteProductAsync(inputModel);
+
+                if (deleteResult == false)
+                {
+                    TempData[ErrorMessageKey] = ProductDeletedError;
+                    this.ModelState.AddModelError(string.Empty, ProductDeletedError);
+
+                    return this.View(inputModel);
+                }
+
+                TempData[SuccessMessageKey] = ProductDeletedSuccessfully;
+                return this.RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                TempData[ErrorMessageKey] = ProductFatalError;
+
+                return this.RedirectToAction(nameof(Index));
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace HoneyShop.Services.Core.Admin.Contracts
 {
+    using HoneyShop.ViewModels.Admin.CategoryManagment;
     using HoneyShop.ViewModels.Admin.ProductManagment;
     public interface IProductService
     {
@@ -10,5 +11,9 @@
         Task<EditProductManagmentViewModel?> GetProductForEditingAsync(Guid? productId);
 
         Task<bool> PersistUpdateProductAsync(EditProductManagmentViewModel inputModel);
+
+        Task<DeleteProductManagmentViewModel?> GetProductForDeleteAsync(Guid? productId);
+
+        Task<bool> SoftDeleteProductAsync(DeleteProductManagmentViewModel inputModel);
     }
 }
