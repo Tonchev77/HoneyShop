@@ -43,21 +43,20 @@
                         <td>@product.Name</td>
                         <td>@product.Description</td>
                         <td>@product.Price</td>
-                        <td>@product.Category</td>
+                        <td>@product.Category.Name</td>
                         <td>
                             <img src="@product.ImageUrl" alt="@product.Name" class="img-thumbnail" style="max-width: 100px;">
                         </td>
                         <td>@product.CreatedAt.ToString()</td>
                         <td>
                             @if (product.IsActive)
-                                @if (product.IsActive)
-                                {
-                                    <div class="text-success">Active</div>
-                                }
-                                else
-                                {
-                                    <div class="text-danger">Not Active</div>
-                                }
+                            {
+                                <div class="text-success">Active</div>
+                            }
+                            else
+                            {
+                                <div class="text-danger">Not Active</div>
+                            }
                         </td>
                         <td>
                             <div class="d-flex gap-2">

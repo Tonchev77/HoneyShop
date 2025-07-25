@@ -13,5 +13,16 @@
             public const string CategoryFatalError = "Fatal error occurred while processing the category!";
 
         }
+
+        public static class Product
+        {
+            public const string ProductAddedSuccessfully = "Product added successfully.";
+            public const string ProductEditedSuccessfully = "Product edited successfully.";
+            public const string ProductEditError = "Fatal error occurred while updating the product!";
+            public const string ProductDeletedSuccessfully = "Product deleted successfully.";
+            public const string ProductDeletedError = "Error occurred while deleting the product!";
+            public const string ProductNotFound = "Product not found.";
+            public const string ProductFatalError = "Fatal error occurred while processing the product!";
+        }
     }
 }

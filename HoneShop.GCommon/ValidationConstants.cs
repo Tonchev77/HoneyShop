@@ -8,10 +8,18 @@
             public const int NameMaxLength = 80;
             public const int NameMinLength = 4;
 
+            public const string NameMinLengthMessage = "Product name must be at least 4 characters long.";
+            public const string NameMaxLengthMessage = "Product name must be at most 80 characters long.";
+
             public const int DescriptionMaxLength = 600;
             public const int DescriptionMinLength = 20;
 
+            public const string DescriptionMinLengthMessage = "Product name must be at least 20 characters long.";
+            public const string DescriptionMaxLengthMessage = "Product name must be at most 600 characters long.";
+
             public const int ImageUrlMaxLength = 300;
+
+            public const string ImageUrlMaxLengthMessage = "ImageUrl must be at most 300 characters long.";
         }
 
         public static class Warehouse

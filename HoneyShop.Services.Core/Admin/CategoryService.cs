@@ -144,5 +144,22 @@
 
             return opResult;
         }
+
+        public async Task<IEnumerable<AddProductCategoryDropDownModel>> GetCategoryDropdownDataAsync()
+        {
+            IEnumerable<Category> categories = await this.categoryRepository
+                .GetAllAttached()
+                .ToListAsync();
+
+            IEnumerable<AddProductCategoryDropDownModel> dropdownModels = categories
+                .Select(c => new AddProductCategoryDropDownModel
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                })
+                .ToList();
+
+            return dropdownModels;
+        }
     }
 }

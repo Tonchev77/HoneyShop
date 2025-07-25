@@ -14,5 +14,7 @@
         Task<DeleteCategoryManagmentViewModel?> GetCategoryForDeleteAsync(Guid? categoryId);
 
         Task<bool> SoftDeleteCategoryAsync(DeleteCategoryManagmentViewModel inputModel);
+
+        Task<IEnumerable<AddProductCategoryDropDownModel>> GetCategoryDropdownDataAsync();
     }
 }
