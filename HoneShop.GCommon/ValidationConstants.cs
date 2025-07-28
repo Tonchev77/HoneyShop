@@ -27,8 +27,14 @@
             public const int NameMaxLength = 60;
             public const int NameMinLength = 4;
 
+            public const string NameMinLengthMessage = "Warehouse name must be at least 4 characters long.";
+            public const string NameMaxLengthMessage = "Warehouse name must be at most 60 characters long.";
+
             public const int LocationMaxLength = 70;
             public const int LocationMinLength = 3;
+
+            public const string LocationMinLengthMessage = "Warehouse name must be at least 3 characters long.";
+            public const string LocationMaxLengthMessage = "Warehouse name must be at most 70 characters long.";
         }
 
         public static class Order

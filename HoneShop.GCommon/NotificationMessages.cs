@@ -24,5 +24,16 @@
             public const string ProductNotFound = "Product not found.";
             public const string ProductFatalError = "Fatal error occurred while processing the product!";
         }
+
+        public static class Warehouse
+        {
+            public const string WarehouseAddedSuccessfully = "Warehouse added successfully.";
+            public const string WarehouseEditedSuccessfully = "Warehouse edited successfully.";
+            public const string WarehouseEditError = "Fatal error occurred while updating the warehouse!";
+            public const string WarehouseDeletedSuccessfully = "Warehouse deleted successfully.";
+            public const string WarehouseDeletedError = "Error occurred while deleting the warehouse!";
+            public const string WarehouseNotFound = "Warehouse not found.";
+            public const string WarehouseFatalError = "Fatal error occurred while processing the warehouse!";
+        }
     }
 }

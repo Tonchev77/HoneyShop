@@ -17,6 +17,27 @@
             this.warehouseRepository = warehouseRepository;
         }
 
+        public async Task<bool> AddWarehouseAsync(AddWarehouseViewModel inputModel)
+        {
+            bool opResult = false;
+
+            if (inputModel != null)
+            {
+                Warehouse newWarehouse = new Warehouse()
+                {
+                    Name = inputModel.Name,
+                    Location = inputModel.Location,
+                };
+
+                await this.warehouseRepository.AddAsync(newWarehouse);
+                await this.warehouseRepository.SaveChangesAsync();
+
+                opResult = true;
+            }
+
+            return opResult;
+        }
+
         public async Task<IEnumerable<WarehouseManagmentIndexViewModel>> GetAllWarehousesAsync()
         {
             List<Warehouse> warehouses = await this.warehouseRepository
