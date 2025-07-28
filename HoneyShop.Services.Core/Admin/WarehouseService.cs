@@ -5,6 +5,7 @@
     using HoneyShop.Services.Core.Admin.Contracts;
     using HoneyShop.ViewModels.Admin.WarehouseManagment;
     using Microsoft.EntityFrameworkCore;
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -54,6 +55,53 @@
                 .ToList();
 
             return allWarehouses;
+        }
+
+        public async Task<EditWarehouseManagmentViewModel?> GetWarehouseForEditingAsync(Guid? warehouseId)
+        {
+            EditWarehouseManagmentViewModel? editModel = null;
+
+            if (warehouseId != null)
+            {
+                Warehouse? editWarehouseModel = await this.warehouseRepository
+                    .GetAllAttached()
+                    .SingleOrDefaultAsync(c => c.Id == warehouseId);
+
+                if (editWarehouseModel != null)
+                {
+                    editModel = new EditWarehouseManagmentViewModel()
+                    {
+                        Id = editWarehouseModel.Id,
+                        Name = editWarehouseModel.Name,
+                        Location = editWarehouseModel.Location
+                    };
+                }
+            }
+
+            return editModel;
+        }
+
+        public async Task<bool> PersistUpdateWarehouseAsync(EditWarehouseManagmentViewModel inputModel)
+        {
+            bool opResult = false;
+
+            Warehouse? updatedWarehouse = await this.warehouseRepository
+                .FirstOrDefaultAsync(c => c.Id == inputModel.Id);
+
+
+            if (updatedWarehouse != null)
+            {
+                updatedWarehouse.Id = inputModel.Id;
+                updatedWarehouse.Name = inputModel.Name;
+                updatedWarehouse.Location = inputModel.Location;
+
+
+                await this.warehouseRepository.SaveChangesAsync();
+
+                opResult = true;
+            }
+
+            return opResult;
         }
     }
 }

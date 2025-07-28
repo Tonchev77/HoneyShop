@@ -39,12 +39,12 @@
                         <td>@warehouse.Location</td>
                         <td>
                             <div class="d-flex gap-2">
-                                <a asp-controller="WarehouseManagment" asp-action="Edit" asp-route-productId="@warehouse.Id"
+                                <a asp-controller="WarehouseManagment" asp-action="EditWarehouse" asp-route-warehouseId="@warehouse.Id"
                                    class="btn btn-primary mb-0 d-flex align-items-center">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                     Edit
                                 </a>
-                                <a asp-controller="WarehouseManagment" asp-action="Delete" asp-route-productId="@warehouse.Id"
+                                <a asp-controller="WarehouseManagment" asp-action="DeleteWarehouse" asp-route-warehouseId="@warehouse.Id"
                                    class="btn btn-danger mb-0 d-flex align-items-center">
                                     <i class="fa-solid fa-trash-can me-1"></i>
                                     Delete

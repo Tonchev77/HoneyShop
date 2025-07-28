@@ -1,0 +1,86 @@
+﻿@using HoneyShop.ViewModels.Admin.WarehouseManagment
+@model EditWarehouseManagmentViewModel
+
+@{
+    ViewData["Title"] = "Edit Warehouse";
+}
+<div class="card card-info card-outline mb-4">
+    <!--begin::Header-->
+    <div class="card-header">
+        <div class="card-title">Edit Warehouse</div>
+    </div>
+    <!--end::Header-->
+    <!--begin::Form-->
+    <form asp-controller="WarehouseManagment" asp-action="EditWarehouse" method="post" class="needs-validation" novalidate>
+        <!--begin::Body-->
+        <div class="card-body">
+            <!-- Validation summary for model errors -->
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <!--begin::Row-->
+            <div class="row g-3">
+                <!--begin::Col-->
+                <div class="col-md-6">
+                    <label for="validationCustom01" class="form-label">
+                        Warehouse Name
+                        <span class="required-indicator sr-only"> (required)</span>
+                    </label>
+                    <input type="hidden" asp-for="Id" />
+                    <input asp-for="Name" type="text" class="form-control" id="validationCustom01" required placeholder="Please enter warehouse name">
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <!--end::Col-->
+                <!--begin::Col-->
+                <div class="col-md-6">
+                    <label for="validationCustom02" class="form-label">
+                        Warehouse Location
+                        <span class="required-indicator sr-only"> (required)</span>
+                    </label>
+                    <input asp-for="Location" type="text" class="form-control" id="validationCustom02" required placeholder="Please enter warehouse location">
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div>
+                <!--end::Col-->
+                <!--begin::Footer-->
+                <div class="card-footer">
+                    <button class="btn btn-success" type="submit"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                    <a asp-controller="WarehouseManagment" asp-action="Index"
+                       class="btn btn-danger">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Cancel
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!--end::Footer-->
+    </form>
+    <!--end::Form-->
+    <!--begin::JavaScript-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (() => {
+            'use strict';
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            const forms = document.querySelectorAll('.needs-validation');
+
+            // Loop over them and prevent submission
+            Array.from(forms).forEach(form => {
+                form.addEventListener(
+                    'submit',
+                    event => {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+
+                        form.classList.add('was-validated');
+                    },
+                    false
+                );
+            });
+        })();
+    </script>
+    <!--end::JavaScript-->
+</div>
