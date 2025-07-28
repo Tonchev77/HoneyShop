@@ -1,6 +1,5 @@
 ﻿namespace HoneyShop.Services.Core.Admin.Contracts
 {
-    using HoneyShop.ViewModels.Admin.CategoryManagment;
     using HoneyShop.ViewModels.Admin.ProductManagment;
     public interface IProductService
     {

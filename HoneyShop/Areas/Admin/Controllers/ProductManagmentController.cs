@@ -1,7 +1,6 @@
 ﻿namespace HoneyShop.Areas.Admin.Controllers
 {
     using HoneyShop.Services.Core.Admin.Contracts;
-    using HoneyShop.ViewModels.Admin.CategoryManagment;
     using HoneyShop.ViewModels.Admin.ProductManagment;
     using Microsoft.AspNetCore.Mvc;
 

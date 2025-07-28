@@ -1,0 +1,61 @@
+﻿@using HoneyShop.ViewModels.Admin.WarehouseManagment
+@using Microsoft.AspNetCore.Identity
+@model IEnumerable<WarehouseManagmentIndexViewModel>
+
+@{
+    ViewData["Title"] = "Warehouse Management";
+}
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h3 class="card-title">Manage Warehouses in the System</h3>
+        <a asp-controller="WarehouseManagment" asp-action="Add"
+           class="btn btn-success mb-2 d-flex align-items-center ms-auto" style="width: fit-content;">
+            <i class="fa-solid fa-plus"></i>
+            Add New Warehouse
+        </a>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body p-0">
+        <table class="table table-striped table-bordered">
+            <!-- Removed role attribute -->
+            <thead>
+                <tr>
+                    <th style="width: 10px" scope="col">#</th>
+                    <th scope="col">Warehouse Name</th>
+                    <th scope="col">Location</th>
+                    <th style="width: 40px" scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int rowCount = 1;
+                }
+                @foreach (WarehouseManagmentIndexViewModel warehouse in Model)
+                {
+                    <tr class="align-middle">
+                        <td>@rowCount.</td>
+                        <td>@warehouse.Name</td>
+                        <td>@warehouse.Location</td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <a asp-controller="WarehouseManagment" asp-action="Edit" asp-route-productId="@warehouse.Id"
+                                   class="btn btn-primary mb-0 d-flex align-items-center">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                    Edit
+                                </a>
+                                <a asp-controller="WarehouseManagment" asp-action="Delete" asp-route-productId="@warehouse.Id"
+                                   class="btn btn-danger mb-0 d-flex align-items-center">
+                                    <i class="fa-solid fa-trash-can me-1"></i>
+                                    Delete
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    rowCount++;
+                }
+            </tbody>
+        </table>
+    </div>
+    <!-- /.card-body -->
+</div>
