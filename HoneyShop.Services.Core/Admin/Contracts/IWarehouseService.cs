@@ -10,5 +10,9 @@
         Task<EditWarehouseManagmentViewModel?> GetWarehouseForEditingAsync(Guid? warehouseId);
 
         Task<bool> PersistUpdateWarehouseAsync(EditWarehouseManagmentViewModel inputModel);
+
+        Task<DeleteWarehouseManagmentViewModel?> GetWarehouseForDeleteAsync(Guid? warehouseId);
+
+        Task<bool> SoftDeleteWarehouseAsync(DeleteWarehouseManagmentViewModel inputModel);
     }
 }

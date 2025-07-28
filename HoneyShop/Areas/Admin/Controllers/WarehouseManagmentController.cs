@@ -1,7 +1,6 @@
 ﻿namespace HoneyShop.Areas.Admin.Controllers
 {
     using HoneyShop.Services.Core.Admin.Contracts;
-    using HoneyShop.ViewModels.Admin.CategoryManagment;
     using HoneyShop.ViewModels.Admin.WarehouseManagment;
     using Microsoft.AspNetCore.Mvc;
 
@@ -136,6 +135,66 @@
                 TempData[ErrorMessageKey] = WarehouseFatalError;
                 return this.RedirectToAction(nameof(Index));
 
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteWarehouse(Guid? warehouseId)
+        {
+            try
+            {
+                DeleteWarehouseManagmentViewModel? deleteInputModel = await this.warehouseService
+                    .GetWarehouseForDeleteAsync(warehouseId);
+
+                if (deleteInputModel == null)
+                {
+                    TempData[ErrorMessageKey] = WarehouseNotFound;
+                    return this.RedirectToAction(nameof(Index));
+                }
+
+                return this.View(deleteInputModel);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                TempData[ErrorMessageKey] = WarehouseFatalError;
+                return this.RedirectToAction(nameof(Index));
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ConfirmDeleteWarehouse(DeleteWarehouseManagmentViewModel inputModel)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    TempData[ErrorMessageKey] = WarehouseDeletedError;
+                    ModelState.AddModelError(string.Empty, WarehouseDeletedError);
+
+                    return this.View(inputModel);
+                }
+
+                bool deleteResult = await this.warehouseService.SoftDeleteWarehouseAsync(inputModel);
+
+                if (deleteResult == false)
+                {
+                    TempData[ErrorMessageKey] = WarehouseDeletedError;
+                    this.ModelState.AddModelError(string.Empty, WarehouseDeletedError);
+
+                    return this.View(inputModel);
+                }
+
+                TempData[SuccessMessageKey] = WarehouseDeletedSuccessfully;
+                return this.RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                TempData[ErrorMessageKey] = WarehouseFatalError;
+
+                return this.RedirectToAction(nameof(Index));
             }
         }
     }

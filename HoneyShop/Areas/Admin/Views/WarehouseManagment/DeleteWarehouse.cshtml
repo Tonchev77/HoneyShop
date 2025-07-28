@@ -1,0 +1,76 @@
+﻿@using HoneyShop.ViewModels.Admin.WarehouseManagment
+@model DeleteWarehouseManagmentViewModel
+
+@{
+    ViewData["Title"] = "Delete Warehouse";
+}
+<div class="card card-info card-outline mb-4">
+    <!--begin::Header-->
+    <div class="card-header">
+        <div class="card-title">Delete Warehouse</div>
+    </div>
+    <!--end::Header-->
+    <!--begin::Form-->
+    <form asp-controller="WarehouseManagment" asp-action="ConfirmDeleteWarehouse" method="post" class="needs-validation" novalidate>
+        <!--begin::Body-->
+        <div class="card-body">
+            <!--begin::Row-->
+            <div class="row g-3">
+                <!--begin::Col-->
+                <div class="col-md-6">
+                    <label class="form-label">
+                        Warehouse Name
+                        <span class="required-indicator sr-only"> (required)</span>
+                    </label>
+                    <input type="hidden" asp-for="Id" />
+                    <input asp-for="Name" type="text" class="form-control-plaintext" id="validationCustom01" readonly tabindex="-1" style="background-color: #f8f9fa;" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">
+                        Warehouse Location
+                        <span class="required-indicator sr-only"> (required)</span>
+                    </label>
+                    <input asp-for="Location" type="text" class="form-control-plaintext" id="validationCustom02" readonly tabindex="-1" style="background-color: #f8f9fa;" />
+                </div>
+                <!--begin::Footer-->
+                <div class="card-footer">
+                    <button class="btn btn-danger" type="submit"><i class="fa-solid fa-trash-can"></i> Delete</button>
+                    <a asp-controller="WarehouseManagment" asp-action="Index"
+                       class="btn btn-primary">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Cancel
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!--end::Footer-->
+    </form>
+    <!--end::Form-->
+    <!--begin::JavaScript-->
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (() => {
+            'use strict';
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            const forms = document.querySelectorAll('.needs-validation');
+
+            // Loop over them and prevent submission
+            Array.from(forms).forEach(form => {
+                form.addEventListener(
+                    'submit',
+                    event => {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+
+                        form.classList.add('was-validated');
+                    },
+                    false
+                );
+            });
+        })();
+    </script>
+    <!--end::JavaScript-->
+</div>

@@ -57,6 +57,29 @@
             return allWarehouses;
         }
 
+        public async Task<DeleteWarehouseManagmentViewModel?> GetWarehouseForDeleteAsync(Guid? warehouseId)
+        {
+            DeleteWarehouseManagmentViewModel? deleteModel = null;
+
+            if (warehouseId != null)
+            {
+                Warehouse? deleteWarehouseModel = await this.warehouseRepository
+                    .SingleOrDefaultAsync(c => c.Id == warehouseId);
+
+                if (deleteWarehouseModel != null)
+                {
+                    deleteModel = new DeleteWarehouseManagmentViewModel()
+                    {
+                        Id = deleteWarehouseModel.Id,
+                        Name = deleteWarehouseModel.Name,
+                        Location = deleteWarehouseModel.Location
+                    };
+                }
+            }
+
+            return deleteModel;
+        }
+
         public async Task<EditWarehouseManagmentViewModel?> GetWarehouseForEditingAsync(Guid? warehouseId)
         {
             EditWarehouseManagmentViewModel? editModel = null;
@@ -95,6 +118,25 @@
                 updatedWarehouse.Name = inputModel.Name;
                 updatedWarehouse.Location = inputModel.Location;
 
+
+                await this.warehouseRepository.SaveChangesAsync();
+
+                opResult = true;
+            }
+
+            return opResult;
+        }
+
+        public async Task<bool> SoftDeleteWarehouseAsync(DeleteWarehouseManagmentViewModel inputModel)
+        {
+            bool opResult = false;
+
+            Warehouse? deletedWarehouse = await this.warehouseRepository
+                .FirstOrDefaultAsync(c => c.Id == inputModel.Id);
+
+            if (deletedWarehouse != null)
+            {
+                deletedWarehouse.IsDeleted = true;
 
                 await this.warehouseRepository.SaveChangesAsync();
 
