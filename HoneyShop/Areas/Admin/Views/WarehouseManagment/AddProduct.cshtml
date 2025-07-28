@@ -1,0 +1,83 @@
+﻿@using HoneyShop.ViewModels.Admin.WarehouseManagment
+@model AddProductToWarehouseViewModel
+
+@{
+    ViewData["Title"] = "Add Product to Warehouse";
+}
+
+<div class="card card-info card-outline mb-4">
+    <!--begin::Header-->
+    <div class="card-header">
+        <div class="card-title">Add New Product to Warehouse</div>
+    </div>
+    <!--end::Header-->
+    <!--begin::Form-->
+    <form asp-controller="WarehouseManagment" asp-action="AddProduct" method="post" class="needs-validation" novalidate>
+        <!--begin::Body-->
+        <div class="card-body">
+            <!-- Validation summary for model errors -->
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <!--begin::Row-->
+            <div class="row g-3">
+                <!--begin::Col-->    
+                <div class="col-md-6">
+                    <input type="hidden" asp-for="WarehouseId" value="@Model.WarehouseId" />
+                    <label for="validationCustom04" class="form-label">Product<span class="required-indicator sr-only"> (required)</span></label>
+                    <select asp-for="@Model.ProductId" class="form-select" id="validationCustom04" required asp-items="@(new SelectList(Model.Products, "Id", "Name"))">
+                        <option selected="" disabled="" value="">Select Product...</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="validationCustom03" class="form-label">
+                        Please enter product quantity
+                        <span class="required-indicator sr-only"> (required)</span>
+                    </label>
+                    <input asp-for="Quantity" type="text" class="form-control" id="validationCustom03" required>
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
+                <!--end::Col-->
+                <!--begin::Footer-->
+                <div class="card-footer">
+                    <button class="btn btn-success" type="submit"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                    <a asp-controller="WarehouseManagment" asp-action="Details" asp-route-warehouseId="@Model.WarehouseId"
+                       class="btn btn-danger">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Cancel
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!--end::Footer-->
+    </form>
+    <!--end::Form-->
+    <!--begin::JavaScript-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (() => {
+            'use strict';
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            const forms = document.querySelectorAll('.needs-validation');
+
+            // Loop over them and prevent submission
+            Array.from(forms).forEach(form => {
+                form.addEventListener(
+                    'submit',
+                    event => {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+
+                        form.classList.add('was-validated');
+                    },
+                    false
+                );
+            });
+        })();
+    </script>
+    <!--end::JavaScript-->
+</div>

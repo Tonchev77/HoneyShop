@@ -14,5 +14,9 @@
         Task<DeleteWarehouseManagmentViewModel?> GetWarehouseForDeleteAsync(Guid? warehouseId);
 
         Task<bool> SoftDeleteWarehouseAsync(DeleteWarehouseManagmentViewModel inputModel);
+
+        Task<IEnumerable<GetProductsInWarehouseViewModel>> GetProductsInWarehouseAsync(Guid warehouseId);
+
+        Task<bool> AddProductToWarehouseAsync(AddProductToWarehouseViewModel inputModel);
     }
 }

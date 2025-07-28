@@ -12,10 +12,55 @@
     public class WarehouseService : IWarehouseService
     {
         private readonly IWarehouseRepository warehouseRepository;
+        private readonly IProductStockRepository productStockRepository;
+        private readonly IProductRepository productRepository;
 
-        public WarehouseService(IWarehouseRepository warehouseRepository)
+        public WarehouseService(IWarehouseRepository warehouseRepository, IProductStockRepository productStockRepository, IProductRepository productRepository)
         {
             this.warehouseRepository = warehouseRepository;
+            this.productStockRepository = productStockRepository;
+            this.productRepository = productRepository;
+        }
+
+        public async Task<bool> AddProductToWarehouseAsync(AddProductToWarehouseViewModel inputModel)
+        {
+            bool opResult = false;
+
+                Product? productRef = await this.productRepository
+                    .FirstOrDefaultAsync(c => c.Id == inputModel.ProductId);
+
+            if (productRef != null)
+            {
+                ProductStock? stock = await this.productStockRepository
+                    .FirstOrDefaultAsync(ps => ps.WarehouseId == inputModel.WarehouseId
+                                          && ps.ProductId == inputModel.ProductId
+                                          && !ps.IsDeleted);
+
+                if (stock != null)
+                {
+                    stock.Quantity += inputModel.Quantity;
+                    this.productStockRepository.Update(stock);
+                }
+                else
+                {
+                    ProductStock newProductStock = new ProductStock()
+                    {
+
+                        WarehouseId = inputModel.WarehouseId,
+                        ProductId = inputModel.ProductId,
+                        Quantity = inputModel.Quantity,
+                        IsDeleted = false
+                    };
+
+                    await this.productStockRepository.AddAsync(newProductStock);
+                }
+
+
+                await this.productStockRepository.SaveChangesAsync();
+                opResult = true;
+            }
+
+            return opResult;
         }
 
         public async Task<bool> AddWarehouseAsync(AddWarehouseViewModel inputModel)
@@ -55,6 +100,30 @@
                 .ToList();
 
             return allWarehouses;
+        }
+
+        public async Task<IEnumerable<GetProductsInWarehouseViewModel>> GetProductsInWarehouseAsync(Guid warehouseId)
+        {
+            var result = await this.productStockRepository
+                .GetAllAttached()
+                .Where(ps => ps.WarehouseId == warehouseId && !ps.IsDeleted)
+                .Join(this.productRepository.GetAllAttached()
+                        .Where(p => !p.IsDeleted),
+                                ps => ps.ProductId,
+                                p => p.Id,
+                                (ps, p) => new GetProductsInWarehouseViewModel
+                                {
+                                    WarehouseId = ps.WarehouseId,
+                                    ProductId = p.Id,
+                                    ProductName = p.Name,
+                                    ProductDescription = p.Description,
+                                    Quantity = ps.Quantity,
+                                    ImageUrl = p.ImageUrl,
+                                    Price = p.Price,
+                                })
+                                .ToListAsync();
+
+            return result;
         }
 
         public async Task<DeleteWarehouseManagmentViewModel?> GetWarehouseForDeleteAsync(Guid? warehouseId)

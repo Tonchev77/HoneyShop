@@ -87,10 +87,22 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="WarehouseManagment" asp-action="Index" class="nav-link">
+                            <a href="#" class="nav-link">
                                 <i class="nav-icon fa-solid fa-warehouse"></i> <p>
-                                    Manage Warehouses
+                                    Warehouses
                                 </p>
+                                <i class="nav-arrow bi bi-chevron-right"></i> </p>
+                            </a>
+                            <ul class="nav nav-treeview" role="navigation" aria-label="Navigation 4" style="display: block; box-sizing: border-box;">
+                                <li class="nav-item">
+                                    <a asp-controller="WarehouseManagment" asp-action="Index" class="nav-link">
+                                        <i class="nav-icon bi bi-circle"></i>
+                                        <p>Manage Warehouses</p>
+                                    </a>
+                                </li>
+                                @await Component.InvokeAsync("Warehouses")
+                            </ul>
+                        </li>
                             </a>
                         </li>
                         <li class="nav-header">USERS</li>

@@ -1,0 +1,16 @@
+﻿@using HoneyShop.ViewModels.Admin.WarehouseManagment
+@model IEnumerable<GetAllWarehouseViewModel>
+
+
+@foreach (GetAllWarehouseViewModel warehouse in Model)
+{
+
+    <li class="nav-item">
+        <a asp-controller="WarehouseManagment"
+           asp-action="Details"
+           asp-route-warehouseId="@warehouse.Id" class="nav-link">
+            <i class="nav-icon bi bi-circle"></i>
+            <p>@warehouse.Name</p>
+        </a>
+    </li>
+}

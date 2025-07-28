@@ -9,10 +9,12 @@
     public class WarehouseManagmentController : BaseAdminController
     {
         private readonly IWarehouseService warehouseService;
+        private readonly IProductService productService;
 
-        public WarehouseManagmentController(IWarehouseService warehouseService)
+        public WarehouseManagmentController(IWarehouseService warehouseService, IProductService productService)
         {
             this.warehouseService = warehouseService;
+            this.productService = productService;
         }
 
         [HttpGet]
@@ -195,6 +197,86 @@
                 TempData[ErrorMessageKey] = WarehouseFatalError;
 
                 return this.RedirectToAction(nameof(Index));
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid warehouseId)
+        {
+
+            try
+            {
+                ViewData["WarehouseId"] = warehouseId;
+
+                IEnumerable<GetProductsInWarehouseViewModel> products = 
+                    await warehouseService.GetProductsInWarehouseAsync(warehouseId);
+
+                return View(products);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+
+                return this.RedirectToAction(nameof(Index), "Home");
+            }         
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AddProduct(Guid warehouseId)
+        {
+            try
+            {
+                var products = await productService.GetAllProductsAsync();
+
+                AddProductToWarehouseViewModel model = new AddProductToWarehouseViewModel
+                {
+                    WarehouseId = warehouseId,
+                    Products = products
+                };
+
+                return View(model);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                TempData[ErrorMessageKey] = WarehouseFatalError;
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddProduct(AddProductToWarehouseViewModel inputModel)
+        {
+            try
+            {
+                ModelState.Remove("Products");
+
+                if (!ModelState.IsValid)
+                {
+                    inputModel.Products = await productService.GetAllProductsAsync();
+                    return View(inputModel);
+                }
+
+                bool addResult = await warehouseService.AddProductToWarehouseAsync(inputModel);
+
+                if (!addResult)
+                {
+                    inputModel.Products = await productService.GetAllProductsAsync();
+
+                    ModelState.AddModelError(string.Empty, WarehouseFatalError);
+                    TempData[ErrorMessageKey] = WarehouseFatalError;
+                    return View(inputModel);
+                }
+
+                TempData[SuccessMessageKey] = WarehouseAddedSuccessfully;
+                return RedirectToAction(nameof(Details), new { warehouseId = inputModel.WarehouseId });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Exception in AddProduct POST: {e.Message}");
+                Console.WriteLine($"Stack trace: {e.StackTrace}");
+                TempData[ErrorMessageKey] = WarehouseFatalError;
+                return RedirectToAction(nameof(Index));
             }
         }
     }

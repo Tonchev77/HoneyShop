@@ -9,16 +9,16 @@
 
     public class CategoryService : ICategoryService
     {
-        private readonly ICategoryRepository categorytRepository;
+        private readonly ICategoryRepository categoryRepository;
 
-        public CategoryService(ICategoryRepository categorytRepository)
+        public CategoryService(ICategoryRepository categoryRepository)
         {
-            this.categorytRepository = categorytRepository;
+            this.categoryRepository = categoryRepository;
         }
 
         public async Task<IEnumerable<GetAllCategoriesViewModel>> GetAllCategoriesAsync()
         {
-            IEnumerable<GetAllCategoriesViewModel> allCategories = await this.categorytRepository
+            IEnumerable<GetAllCategoriesViewModel> allCategories = await this.categoryRepository
                 .GetAllAttached()
                 .Select(c => new GetAllCategoriesViewModel 
                 {
