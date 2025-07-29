@@ -280,5 +280,64 @@
                 return RedirectToAction(nameof(Index));
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> EditProduct(Guid warehouseId, Guid productId) 
+        {
+            try
+            {
+                EditProductFromWarehouseViewModel? editInputModel = await this.warehouseService
+                    .GetProductFromWarehouseForEditingAsync(warehouseId, productId);
+
+                if (editInputModel == null)
+                {
+                    TempData[ErrorMessageKey] = ProductStockNotFound;
+                    return this.RedirectToAction(nameof(Details), new { warehouseId });
+                }
+
+                return this.View(editInputModel);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                TempData[ErrorMessageKey] = ProductStockFatalError;
+                return this.RedirectToAction(nameof(Details), new { warehouseId });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditProduct(EditProductFromWarehouseViewModel inputModel)
+        {
+            try
+            {
+                ModelState.Remove("Products");
+
+                if (!this.ModelState.IsValid)
+                {
+                    inputModel.Products = await productService.GetAllProductsAsync();
+                    return this.View(inputModel);
+                }
+
+                bool updateResult = await warehouseService.PersistUpdateProductFromWarehouseAsync(inputModel);
+
+                if (!updateResult)
+                {
+                    inputModel.Products = await productService.GetAllProductsAsync();
+                    ModelState.AddModelError(string.Empty, ProductStockEditError);
+                    TempData[ErrorMessageKey] = ProductStockEditError;
+
+                    return this.View(inputModel);
+                }
+
+                TempData[SuccessMessageKey] = ProductStockEditedSuccessfully;
+                return RedirectToAction(nameof(Details), new { warehouseId = inputModel.WarehouseId });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                TempData[ErrorMessageKey] = ProductStockFatalError;
+                return this.RedirectToAction(nameof(Details), new { warehouseId = inputModel.WarehouseId });
+            }
+        }
     }
 }

@@ -3,6 +3,7 @@
     using HoneyShop.Data.Models;
     using HoneyShop.Data.Repository.Interfaces;
     using HoneyShop.Services.Core.Admin.Contracts;
+    using HoneyShop.ViewModels.Admin.ProductManagment;
     using HoneyShop.ViewModels.Admin.WarehouseManagment;
     using Microsoft.EntityFrameworkCore;
     using System;
@@ -102,6 +103,48 @@
             return allWarehouses;
         }
 
+        public async Task<EditProductFromWarehouseViewModel?> GetProductFromWarehouseForEditingAsync(Guid? warehouseId, Guid? productId)
+        {
+            EditProductFromWarehouseViewModel? editModel = null;
+
+            if (warehouseId != null && productId != null)
+            {
+
+                ProductStock? productStock = await this.productStockRepository
+                    .FirstOrDefaultAsync(ps => ps.WarehouseId == warehouseId
+                                        && ps.ProductId == productId
+                                        && !ps.IsDeleted);
+
+                if (productStock != null)
+                {
+
+                    List<ProductManagmentIndexViewModel> allProducts = await this.productRepository
+                        .GetAllAttached()
+                        .Where(p => !p.IsDeleted)
+                        .Select(p => new ProductManagmentIndexViewModel
+                        {
+                            Id = p.Id,
+                            Name = p.Name,
+                            Description = p.Description,
+                            Price = p.Price,
+                            IsActive = p.IsActive
+                        })
+                        .ToListAsync();
+
+
+                    editModel = new EditProductFromWarehouseViewModel()
+                    {
+                        WarehouseId = productStock.WarehouseId,
+                        ProductId = productStock.ProductId,
+                        Quantity = productStock.Quantity,
+                        Products = allProducts
+                    };
+                }
+            }
+
+            return editModel;
+        }
+
         public async Task<IEnumerable<GetProductsInWarehouseViewModel>> GetProductsInWarehouseAsync(Guid warehouseId)
         {
             IEnumerable<GetProductsInWarehouseViewModel> result = await this.productStockRepository
@@ -171,6 +214,32 @@
             }
 
             return editModel;
+        }
+
+        public async Task<bool> PersistUpdateProductFromWarehouseAsync(EditProductFromWarehouseViewModel inputModel)
+        {
+            bool opResult = false;
+
+            if (inputModel != null)
+            {
+                ProductStock? productStock = await this.productStockRepository
+                    .FirstOrDefaultAsync(ps => ps.WarehouseId == inputModel.WarehouseId
+                                          && ps.ProductId == inputModel.ProductId
+                                          && !ps.IsDeleted);
+
+                if (productStock != null)
+                {
+
+                    productStock.Quantity = inputModel.Quantity;
+
+                    this.productStockRepository.Update(productStock);
+
+                    await this.productStockRepository.SaveChangesAsync();
+                    opResult = true;
+                }
+            }
+
+            return opResult;
         }
 
         public async Task<bool> PersistUpdateWarehouseAsync(EditWarehouseManagmentViewModel inputModel)

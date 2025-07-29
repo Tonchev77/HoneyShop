@@ -18,5 +18,9 @@
         Task<IEnumerable<GetProductsInWarehouseViewModel>> GetProductsInWarehouseAsync(Guid warehouseId);
 
         Task<bool> AddProductToWarehouseAsync(AddProductToWarehouseViewModel inputModel);
+
+        Task<EditProductFromWarehouseViewModel?> GetProductFromWarehouseForEditingAsync(Guid? warehouseId, Guid? productId);
+
+        Task<bool> PersistUpdateProductFromWarehouseAsync(EditProductFromWarehouseViewModel inputModel);
     }
 }
