@@ -339,5 +339,88 @@
                 return this.RedirectToAction(nameof(Details), new { warehouseId = inputModel.WarehouseId });
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteProduct(Guid warehouseId, Guid productId)
+        {
+            try
+            {
+                DeleteProductFromWarehouseViewModel? deleteInputModel = await this.warehouseService
+                    .GetProductFromWarehouseForDeleteAsync(warehouseId, productId);
+
+                if (deleteInputModel == null)
+                {
+                    TempData[ErrorMessageKey] = ProductStockNotFound;
+                    return this.RedirectToAction(nameof(Details), new { warehouseId });
+                }
+
+                return this.View(deleteInputModel);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                TempData[ErrorMessageKey] = ProductStockFatalError;
+                return this.RedirectToAction(nameof(Details), new { warehouseId });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ConfirmDeleteProduct(DeleteProductFromWarehouseViewModel inputModel)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    TempData[ErrorMessageKey] = ProductStockDeletedError;
+                    ModelState.AddModelError(string.Empty, ProductStockDeletedError);
+
+                    return this.View(inputModel);
+                }
+
+                bool deleteResult = await warehouseService.SoftDeleteProductFromWarehouseAsync(inputModel);
+
+                if (!deleteResult)
+                {
+                    TempData[ErrorMessageKey] = ProductStockDeletedError;
+                    ModelState.AddModelError(string.Empty, ProductStockDeletedError);
+
+                    return this.View(inputModel);
+                }
+
+                TempData[SuccessMessageKey] = ProductStockDeletedSuccessfully;
+                return RedirectToAction(nameof(Details), new { warehouseId = inputModel.WarehouseId });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                TempData[ErrorMessageKey] = ProductStockFatalError;
+
+                return RedirectToAction(nameof(Details), new { warehouseId = inputModel.WarehouseId });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RecoverProduct(Guid warehouseId, Guid productId)
+        {
+            try
+            {
+                bool recoverResult = await warehouseService.RecoverProductFromWarehouseAsync(warehouseId, productId);
+
+                if (!recoverResult)
+                {
+                    TempData[ErrorMessageKey] = ProductStockRecoverError;
+                    return RedirectToAction(nameof(Details), new { warehouseId });
+                }
+
+                TempData[SuccessMessageKey] = ProductStockRecoverSuccessfully;
+                return RedirectToAction(nameof(Details), new { warehouseId });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                TempData[ErrorMessageKey] = ProductStockFatalError;
+                return RedirectToAction(nameof(Details), new { warehouseId });
+            }
+        }
     }
 }

@@ -26,6 +26,7 @@
                     <th scope="col">Price</th>
                     <th scope="col">Quantity</th>
                     <th scope="col">Image</th>
+                    <th scope="col">Status</th>
                     <th style="width: 40px" scope="col">Actions</th>
                 </tr>
             </thead>
@@ -35,7 +36,7 @@
                 }
                 @foreach (GetProductsInWarehouseViewModel product in Model)
                 {
-                    <tr class="align-middle">
+                    <tr class="align-middle @(product.IsDeleted ? "table-danger" : "")">
                         <td>@rowCount.</td>
                         <td>@product.ProductName</td>
                         <td>@product.ProductDescription</td>
@@ -45,17 +46,41 @@
                             <img src="@product.ImageUrl" alt="@product.ProductName" class="img-thumbnail" style="max-width: 100px;">
                         </td>
                         <td>
+                            @if (product.IsDeleted)
+                            {
+                                <span class="badge bg-danger">Deleted</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">Active</span>
+                            }
+                        </td>
+                        <td>
                             <div class="d-flex gap-2">
-                                <a asp-controller="WarehouseManagment" asp-action="EditProduct" asp-route-warehouseId="@product.WarehouseId" asp-route-productId="@product.ProductId"
-                                   class="btn btn-primary mb-0 d-flex align-items-center">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                    Edit
-                                </a>
-                                <a asp-controller="WarehouseManagment" asp-action="Delete" asp-route-warehouseId="@product.WarehouseId"
-                                   class="btn btn-danger mb-0 d-flex align-items-center">
-                                    <i class="fa-solid fa-trash-can me-1"></i>
-                                    Delete
-                                </a>
+                                @if (!product.IsDeleted)
+                                {
+                                    <a asp-controller="WarehouseManagment" asp-action="EditProduct" asp-route-warehouseId="@product.WarehouseId" asp-route-productId="@product.ProductId"
+                                       class="btn btn-primary mb-0 d-flex align-items-center">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                        Edit
+                                    </a>
+                                    <a asp-controller="WarehouseManagment" asp-action="DeleteProduct" asp-route-warehouseId="@product.WarehouseId" asp-route-productId="@product.ProductId"
+                                       class="btn btn-danger mb-0 d-flex align-items-center">
+                                        <i class="fa-solid fa-trash-can me-1"></i>
+                                        Delete
+                                    </a>
+                                }
+                                else
+                                {
+                                    <form asp-controller="WarehouseManagment" asp-action="RecoverProduct" method="post">
+                                        <input type="hidden" name="warehouseId" value="@product.WarehouseId" />
+                                        <input type="hidden" name="productId" value="@product.ProductId" />
+                                        <button type="submit" class="btn btn-success mb-0 d-flex align-items-center">
+                                            <i class="fa-solid fa-recycle me-1"></i>
+                                            Recover
+                                        </button>
+                                    </form>
+                                }
                             </div>
                         </td>
                     </tr>

@@ -22,5 +22,11 @@
         Task<EditProductFromWarehouseViewModel?> GetProductFromWarehouseForEditingAsync(Guid? warehouseId, Guid? productId);
 
         Task<bool> PersistUpdateProductFromWarehouseAsync(EditProductFromWarehouseViewModel inputModel);
+
+        Task<DeleteProductFromWarehouseViewModel?> GetProductFromWarehouseForDeleteAsync(Guid? warehouseId, Guid productId);
+
+        Task<bool> SoftDeleteProductFromWarehouseAsync(DeleteProductFromWarehouseViewModel inputModel);
+
+        Task<bool> RecoverProductFromWarehouseAsync(Guid warehouseId, Guid productId);
     }
 }

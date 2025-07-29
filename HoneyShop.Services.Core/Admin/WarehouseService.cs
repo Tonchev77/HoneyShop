@@ -27,8 +27,8 @@
         {
             bool opResult = false;
 
-                Product? productRef = await this.productRepository
-                    .FirstOrDefaultAsync(c => c.Id == inputModel.ProductId);
+            Product? productRef = await this.productRepository
+                .FirstOrDefaultAsync(c => c.Id == inputModel.ProductId);
 
             if (productRef != null)
             {
@@ -103,6 +103,51 @@
             return allWarehouses;
         }
 
+        public async Task<DeleteProductFromWarehouseViewModel?> GetProductFromWarehouseForDeleteAsync(Guid? warehouseId, Guid productId)
+        {
+            DeleteProductFromWarehouseViewModel? deleteModel = null;
+
+            if (warehouseId != null)
+            {
+                var productStockWithDetails = await this.productStockRepository
+                    .GetAllAttached()
+                    .Where(ps => ps.WarehouseId == warehouseId
+                          && ps.ProductId == productId
+                          && !ps.IsDeleted)
+                    .Join(this.productRepository.GetAllAttached()
+                        .Where(p => !p.IsDeleted),
+                        ps => ps.ProductId,
+                        p => p.Id,
+                        (ps, p) => new
+                        {
+                            ps.WarehouseId,
+                            ps.ProductId,
+                            p.Name,
+                            p.Description,
+                            ps.Quantity,
+                            p.ImageUrl,
+                            p.Price
+                        })
+                    .FirstOrDefaultAsync();
+
+                if (productStockWithDetails != null)
+                {
+                    deleteModel = new DeleteProductFromWarehouseViewModel()
+                    {
+                        WarehouseId = productStockWithDetails.WarehouseId,
+                        ProductId = productStockWithDetails.ProductId,
+                        ProductName = productStockWithDetails.Name,
+                        ProductDescription = productStockWithDetails.Description,
+                        Quantity = productStockWithDetails.Quantity,
+                        ImageUrl = productStockWithDetails.ImageUrl,
+                        Price = productStockWithDetails.Price
+                    };
+                }
+            }
+
+            return deleteModel;
+        }
+
         public async Task<EditProductFromWarehouseViewModel?> GetProductFromWarehouseForEditingAsync(Guid? warehouseId, Guid? productId)
         {
             EditProductFromWarehouseViewModel? editModel = null;
@@ -149,22 +194,24 @@
         {
             IEnumerable<GetProductsInWarehouseViewModel> result = await this.productStockRepository
                 .GetAllAttached()
-                .Where(ps => ps.WarehouseId == warehouseId && !ps.IsDeleted)
+                .IgnoreQueryFilters()
+                .Where(ps => ps.WarehouseId == warehouseId)
                 .Join(this.productRepository.GetAllAttached()
-                        .Where(p => !p.IsDeleted),
-                                ps => ps.ProductId,
-                                p => p.Id,
-                                (ps, p) => new GetProductsInWarehouseViewModel
-                                {
-                                    WarehouseId = ps.WarehouseId,
-                                    ProductId = p.Id,
-                                    ProductName = p.Name,
-                                    ProductDescription = p.Description,
-                                    Quantity = ps.Quantity,
-                                    ImageUrl = p.ImageUrl,
-                                    Price = p.Price,
-                                })
-                                .ToListAsync();
+                        .IgnoreQueryFilters(),
+                        ps => ps.ProductId,
+                        p => p.Id,
+                        (ps, p) => new GetProductsInWarehouseViewModel
+                        {
+                            WarehouseId = ps.WarehouseId,
+                            ProductId = p.Id,
+                            ProductName = p.Name,
+                            ProductDescription = p.Description,
+                            Quantity = ps.Quantity,
+                            ImageUrl = p.ImageUrl,
+                            Price = p.Price,
+                            IsDeleted = ps.IsDeleted
+                        })
+                        .ToListAsync();
 
             return result;
         }
@@ -260,6 +307,56 @@
                 await this.warehouseRepository.SaveChangesAsync();
 
                 opResult = true;
+            }
+
+            return opResult;
+        }
+
+        public async Task<bool> RecoverProductFromWarehouseAsync(Guid warehouseId, Guid productId)
+        {
+            bool opResult = false;
+
+            ProductStock? productStock = await this.productStockRepository
+                .GetAllAttached()
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(ps => ps.WarehouseId == warehouseId
+                                    && ps.ProductId == productId
+                                    && ps.IsDeleted);
+
+            if (productStock != null)
+            {
+
+                productStock.IsDeleted = false;
+
+                this.productStockRepository.Update(productStock);
+
+                await this.productStockRepository.SaveChangesAsync();
+                opResult = true;
+            }
+
+            return opResult;
+        }
+
+        public async Task<bool> SoftDeleteProductFromWarehouseAsync(DeleteProductFromWarehouseViewModel inputModel)
+        {
+            bool opResult = false;
+
+            if (inputModel != null)
+            {
+                ProductStock? productStock = await this.productStockRepository
+                    .FirstOrDefaultAsync(ps => ps.WarehouseId == inputModel.WarehouseId
+                                        && ps.ProductId == inputModel.ProductId
+                                        && !ps.IsDeleted);
+
+                if (productStock != null)
+                {
+                    productStock.IsDeleted = true;
+
+                    this.productStockRepository.Update(productStock);
+
+                    await this.productStockRepository.SaveChangesAsync();
+                    opResult = true;
+                }
             }
 
             return opResult;

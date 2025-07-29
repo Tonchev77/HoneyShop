@@ -45,6 +45,8 @@
             public const string ProductStockDeletedError = "Error occurred while deleting the product in warehouse!";
             public const string ProductStockNotFound = "Product in warehouse not found.";
             public const string ProductStockFatalError = "Fatal error occurred while processing the product in warehouse!";
+            public const string ProductStockRecoverError = "Failed to recover product in warehouse.";
+            public const string ProductStockRecoverSuccessfully = "Product in warehouse recovered successfully.";
         }
     }
 }

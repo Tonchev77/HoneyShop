@@ -1,0 +1,93 @@
+﻿@using HoneyShop.ViewModels.Admin.WarehouseManagment
+@model DeleteProductFromWarehouseViewModel
+
+@{
+    ViewData["Title"] = "Delete Product from Warehoyse";
+}
+<div class="card card-info card-outline mb-4">
+    <!--begin::Header-->
+    <div class="card-header">
+        <div class="card-title">
+            <i class="fa-solid fa-trash-can text-danger"></i> Delete Product from Warehouse
+        </div>
+    </div>
+    <!--end::Header-->
+    <!--begin::Form-->
+    <form asp-controller="WarehouseManagment" asp-action="ConfirmDeleteProduct" method="post" class="needs-validation" novalidate>
+        <div class="card-body">
+            <div class="row g-4 align-items-center">
+                <!-- Image Column -->
+                <div class="col-md-4 text-center">
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <img src="@Model.ImageUrl"
+                             alt="@Model.ProductName"
+                             class="img-fluid rounded border shadow-sm mb-3"
+                             style="max-width: 220px; max-height: 220px; object-fit: contain;" />
+                    }
+                    else
+                    {
+                        <div class="border rounded bg-light d-flex align-items-center justify-content-center" style="height: 220px;">
+                            <span class="text-muted">No Image</span>
+                        </div>
+                    }
+                </div>
+                <!-- Details Column -->
+                <div class="col-md-8">
+                    <input type="hidden" asp-for="ProductId" />
+                    <input type="hidden" asp-for="WarehouseId"/>
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Product Name:</dt>
+                        <dd class="col-sm-8">
+                            <input asp-for="ProductName" type="text" class="form-control-plaintext fw-bold" readonly style="background-color: #f8f9fa;" />
+                        </dd>
+                        <dt class="col-sm-4">Description:</dt>
+                        <dd class="col-sm-8">
+                            <input asp-for="ProductDescription" type="text" class="form-control-plaintext" readonly style="background-color: #f8f9fa;" />
+                        </dd>
+                        <dt class="col-sm-4">Price:</dt>
+                        <dd class="col-sm-8">
+                            <input asp-for="Price" type="text" class="form-control-plaintext" readonly style="background-color: #f8f9fa;" />
+                        </dd>
+                        <dt class="col-sm-4">Image URL:</dt>
+                        <dd class="col-sm-8">
+                            <input asp-for="ImageUrl" type="text" class="form-control-plaintext" readonly style="background-color: #f8f9fa;" />
+                        </dd>  
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <!--begin::Footer-->
+        <div class="card-footer text-end">
+            <button class="btn btn-danger me-2" type="submit">
+                <i class="fa-solid fa-trash-can"></i> Delete
+            </button>
+            <a asp-controller="WarehouseManagment" asp-action="Details" asp-route-warehouseId="@Model.WarehouseId" class="btn btn-secondary">
+                <i class="fa-solid fa-arrow-left"></i> Cancel
+            </a>
+        </div>
+        <!--end::Footer-->
+    </form>
+    <!--end::Form-->
+    <!--begin::JavaScript-->
+    <script>
+        (() => {
+            'use strict';
+            const forms = document.querySelectorAll('.needs-validation');
+            Array.from(forms).forEach(form => {
+                form.addEventListener(
+                    'submit',
+                    event => {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    },
+                    false
+                );
+            });
+        })();
+    </script>
+    <!--end::JavaScript-->
+</div>
