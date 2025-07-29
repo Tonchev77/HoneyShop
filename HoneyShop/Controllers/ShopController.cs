@@ -1,41 +1,37 @@
 ﻿namespace HoneyShop.Controllers
 {
+    using HoneyShop.Services.Core;
     using HoneyShop.Services.Core.Contracts;
     using HoneyShop.ViewModels.Shop;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
+
+    using static HoneyShop.GCommon.ApplicationConstants;
     public class ShopController : BaseController
     {
         private readonly IProductService productService;
         private readonly ICategoryService categoryService;
 
+        private const int DefaultPageSize = DefaultProductsPerPageSize; // Add this constant definition
         public ShopController(IProductService productService, ICategoryService categoryService)
         {
             this.productService = productService;
             this.categoryService = categoryService;
         }
 
-        
+
         [AllowAnonymous]
-        public async Task<IActionResult> Index(string? searchString, Guid? categoryId)
+        public async Task<IActionResult> Index(string? searchString, Guid? categoryId, SortOption sortBy = SortOption.Default, int page = 1)
         {
-            //ShopIndexViewModel viewModel = new ShopIndexViewModel
-            //{
-            //    Products = await this.productService.GetAllProductsAsync(),
-            //    Categories = await this.categoryService.GetAllCategoriesAsync()
-            //};
-
-            ////IEnumerable<GetAllProductsViewModel> allProducts = await this.productService.GetAllProductsAsync();
-
-            ////IEnumerable<GetProductCategoryViewModel> allCategories = await this.categoryService.GetAllCategoriesAsync();
-
-            //return View(viewModel);
             try
             {
                 IEnumerable<GetAllProductsViewModel> products;
 
-                // Filtering logic
+                // Filtering logic using ShopService methods
                 if (!string.IsNullOrWhiteSpace(searchString) && categoryId.HasValue)
                 {
                     products = await this.productService.GetAllProductsByStringAndCategoryAsync(searchString, categoryId.Value);
@@ -53,31 +49,28 @@
                     products = await this.productService.GetAllProductsAsync();
                 }
 
-                // Redirect if no products found
-                if (!products.Any())
-                {
-                    TempData["Message"] = "No products found, showing all products.";
-                    // Redirect to Index without filters
-                    return RedirectToAction(nameof(Index), new { searchString = (string)null, categoryId = (Guid?)null });
-                }
-
-                var viewModel = new ShopIndexViewModel
+                // Create the view model with the filtered products and categories
+                ShopIndexViewModel? viewModel = new ShopIndexViewModel
                 {
                     Products = products,
                     Categories = await this.categoryService.GetAllCategoriesAsync(),
-                    SearchString = searchString,
-                    CategoryId = categoryId
                 };
+
+                // Set filter and pagination options
+                viewModel.SearchString = searchString;
+                viewModel.CategoryId = categoryId;
+                viewModel.SortBy = sortBy;
+                viewModel.CurrentPage = page;
+                viewModel.PageSize = DefaultPageSize;
+                viewModel.TotalProducts = products.Count();
 
                 return View(viewModel);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e.Message);
-
+                Console.WriteLine(ex.Message);
                 return this.RedirectToAction(nameof(Index), "Home");
             }
-            
         }
 
         [AllowAnonymous]

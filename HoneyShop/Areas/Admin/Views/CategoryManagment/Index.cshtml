@@ -1,4 +1,4 @@
-﻿@using HoneyShop.ViewModels.Admin.CategoryManagment
+﻿﻿@using HoneyShop.ViewModels.Admin.CategoryManagment
 @using Microsoft.AspNetCore.Identity
 @model IEnumerable<CategoryManagmentIndexViewModel>
 
@@ -10,10 +10,10 @@
     <div class="card-header">
         <h3 class="card-title">Manage Categories in System</h3>
         <a asp-controller="CategoryManagment" asp-action="Add"
-               class="btn btn-success mb-2 d-flex align-items-center ms-auto" style="width: fit-content;">
-                <i class="fa-solid fa-plus"></i>
-                 Add New Category
-            </a>
+           class="btn btn-success mb-2 d-flex align-items-center ms-auto" style="width: fit-content;">
+            <i class="fa-solid fa-plus"></i>
+            Add New Category
+        </a>
     </div>
     <!-- /.card-header -->
     <div class="card-body p-0">
@@ -48,7 +48,7 @@
                                    class="btn btn-danger mb-0 d-flex align-items-center">
                                     <i class="fa-solid fa-trash-can me-1"></i>
                                     Delete
-                                </a> 
+                                </a>
                             </div>
                         </td>
                     </tr>

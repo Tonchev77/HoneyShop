@@ -17,5 +17,7 @@
         public const string WarningMessageKey = "warning";
         public const string ErrorMessageKey = "error";
         public const string SuccessMessageKey = "success";
+
+        public const int DefaultProductsPerPageSize = 6;
     }
 }
