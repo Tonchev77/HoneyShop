@@ -104,7 +104,7 @@
 
         public async Task<IEnumerable<GetProductsInWarehouseViewModel>> GetProductsInWarehouseAsync(Guid warehouseId)
         {
-            var result = await this.productStockRepository
+            IEnumerable<GetProductsInWarehouseViewModel> result = await this.productStockRepository
                 .GetAllAttached()
                 .Where(ps => ps.WarehouseId == warehouseId && !ps.IsDeleted)
                 .Join(this.productRepository.GetAllAttached()

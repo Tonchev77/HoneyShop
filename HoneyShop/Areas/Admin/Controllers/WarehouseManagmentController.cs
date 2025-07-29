@@ -6,6 +6,7 @@
 
     using static HoneyShop.GCommon.ApplicationConstants;
     using static HoneyShop.GCommon.NotificationMessages.Warehouse;
+    using static HoneyShop.GCommon.NotificationMessages.ProductStock;
     public class WarehouseManagmentController : BaseAdminController
     {
         private readonly IWarehouseService warehouseService;
@@ -239,7 +240,7 @@
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                TempData[ErrorMessageKey] = WarehouseFatalError;
+                TempData[ErrorMessageKey] = ProductStockFatalError;
                 return RedirectToAction(nameof(Index));
             }
         }
@@ -263,19 +264,19 @@
                 {
                     inputModel.Products = await productService.GetAllProductsAsync();
 
-                    ModelState.AddModelError(string.Empty, WarehouseFatalError);
-                    TempData[ErrorMessageKey] = WarehouseFatalError;
+                    ModelState.AddModelError(string.Empty, ProductStockFatalError);
+                    TempData[ErrorMessageKey] = ProductStockFatalError;
                     return View(inputModel);
                 }
 
-                TempData[SuccessMessageKey] = WarehouseAddedSuccessfully;
+                TempData[SuccessMessageKey] = ProductStockAddedSuccessfully;
                 return RedirectToAction(nameof(Details), new { warehouseId = inputModel.WarehouseId });
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Exception in AddProduct POST: {e.Message}");
-                Console.WriteLine($"Stack trace: {e.StackTrace}");
-                TempData[ErrorMessageKey] = WarehouseFatalError;
+                Console.WriteLine(e.Message);
+                TempData[ErrorMessageKey] = ProductStockFatalError;
+
                 return RedirectToAction(nameof(Index));
             }
         }
