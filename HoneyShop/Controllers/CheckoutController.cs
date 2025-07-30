@@ -100,7 +100,7 @@
                 }
                 catch
                 {
-                    // If recalculation fails, at least don't lose what we had
+                    return this.RedirectToAction(nameof(Index), "Home");
                 }
 
                 return View("Index", model);

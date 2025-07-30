@@ -1,0 +1,71 @@
+﻿@using HoneyShop.ViewModels.Cart
+@model IEnumerable<GetAllCartItemsViewModel>
+
+@{
+    int itemCount = Model.Sum(x => x.Quantity);
+    decimal totalAmount = Model.Sum(x => x.Quantity * x.ProductDetails.Price);
+}
+
+<li class="cart-icon">
+    <a asp-controller="Cart" asp-action="Index">
+        <i class="icon_bag_alt"></i>
+        <span>@itemCount</span>
+    </a>
+    <div class="cart-hover">
+        <div class="select-items">
+            <table>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var item in Model.Take(3)) // Show only first 3 items
+                        {
+                            <tr>
+                                <td class="si-pic"><img src="@item.ProductDetails.ImageUrl" alt="@item.ProductDetails.Name"></td>
+                                <td class="si-text">
+                                    <div class="product-selected">
+                                        <p>$@item.ProductDetails.Price.ToString("F2") x @item.Quantity</p>
+                                        <h6>@item.ProductDetails.Name</h6>
+                                    </div>
+                                </td>
+                                <td class="si-close">
+                                    <form asp-controller="Cart" asp-action="Delete" method="post">
+                                        <input type="hidden" name="CartId" value="@item.CartId" />
+                                        <input type="hidden" name="ProductId" value="@item.ProductId" />
+                                        <input type="hidden" name="Quantity" value="@item.Quantity" />
+                                        <button type="submit" class="btn btn-link p-0">
+                                            <i class="ti-close"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+
+                        @if (Model.Count() > 3)
+                        {
+                            <tr>
+                                <td colspan="3" class="text-center">
+                                    <small>... and @(Model.Count() - 3) more item(s)</small>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3" class="text-center">Your cart is empty</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="select-total">
+            <span>total:</span>
+            <h5>$@totalAmount.ToString("F2")</h5>
+        </div>
+        <div class="select-button">
+            <a asp-controller="Cart" asp-action="Index" class="primary-btn view-card">VIEW CART</a>
+            <a asp-controller="Checkout" asp-action="Index" class="primary-btn checkout-btn">CHECK OUT</a>
+        </div>
+    </div>
+</li>
+<li class="cart-price">$@totalAmount.ToString("F2")</li>
