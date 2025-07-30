@@ -42,8 +42,14 @@
             public const int ShippingCityMaxLength = 70;
             public const int ShippingCityMinLength = 4;
 
+            public const string ShippingCityMinLengthMessage = "Shipping city must be at least 4 characters long.";
+            public const string ShippingCityMaxLengthMessage = "Shipping city must be at most 70 characters long.";
+
             public const int ShippingAddressMaxLength = 70;
             public const int ShippingAddressMinLength = 4;
+
+            public const string ShippingAddressMinLengthMessage = "Shipping address must be at least 4 characters long.";
+            public const string ShippingAddressMaxLengthMessage = "Shipping address must be at most 70 characters long.";
 
         }
 

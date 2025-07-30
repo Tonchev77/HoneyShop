@@ -3,6 +3,20 @@
 
 @{
     ViewData["Title"] = "Cart";
+
+    // Calculate subtotal and total on the server side
+    decimal subtotal = 0;
+    if (Model != null && Model.Any())
+    {
+        foreach (var item in Model)
+        {
+            subtotal += item.ProductDetails.Price * item.Quantity;
+        }
+    }
+
+    // For this example, total is the same as subtotal
+    // You could add shipping costs, tax, etc. here
+    decimal total = subtotal;
 }
 
 <!-- Breadcrumb Section Begin -->
@@ -31,8 +45,6 @@
                 }
                 else
                 {
-
-
                     <div class="cart-table">
                         @foreach (GetAllCartItemsViewModel cartItem in Model)
                         {
@@ -53,18 +65,14 @@
                                         <td class="cart-title first-row">
                                             <h5>@cartItem.ProductDetails.Name</h5>
                                         </td>
-                                        <td class="p-price first-row">$@cartItem.ProductDetails.Price</td>
+                                        <td class="p-price first-row">$@cartItem.ProductDetails.Price.ToString("F2")</td>
                                         <td class="qua-col first-row">
-                                            <div class="quantity">
-                                                <div class="pro-qty">
-                                                    <input type="number" min="1" value="@cartItem.Quantity"
-                                                           data-price="@cartItem.ProductDetails.Price"
-                                                           onchange="updateTotal(this)">
-                                                </div>
+                                            <div class="quantity-display">
+                                                @cartItem.Quantity
                                             </div>
                                         </td>
-                                        <td class="total-price first-row" id="total-@cartItem.ProductDetails.Id">
-                                            $@(cartItem.ProductDetails.Price* cartItem.Quantity)
+                                        <td class="total-price first-row">
+                                            $@((cartItem.ProductDetails.Price * cartItem.Quantity).ToString("F2"))
                                         </td>
                                         <td class="close-td first-row">
                                             <form asp-controller="Cart" asp-action="Delete" method="post">
@@ -86,10 +94,10 @@
                     <div class="col-lg-4 offset-lg-4">
                         <div class="proceed-checkout">
                             <ul>
-                                <li class="subtotal">Subtotal <span>$240.00</span></li>
-                                <li class="cart-total">Total <span>$240.00</span></li>
+                                <li class="subtotal">Subtotal <span>$@subtotal.ToString("F2")</span></li>
+                                <li class="cart-total">Total <span>$@total.ToString("F2")</span></li>
                             </ul>
-                            <a href="#" class="proceed-btn">PROCEED TO CHECK OUT</a>
+                            <a asp-controller="Checkout" asp-action="Index" class="proceed-btn">PROCEED TO ORDER</a>
                         </div>
                     </div>
                 </div>
@@ -98,3 +106,17 @@
     </div>
 </section>
 <!-- Shopping Cart Section End -->
+
+<style>
+    /* Completely new styling that removes any pro-qty styling */
+    .quantity-display {
+        text-align: center;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 8px 12px;
+        border-radius: 4px;
+        background-color: #f5f5f5;
+        display: inline-block;
+        min-width: 40px;
+    }
+</style>

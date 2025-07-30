@@ -78,6 +78,36 @@
         }
 
         [HttpPost]
+        public async Task<IActionResult> Add(Guid id, int quantity = 1)
+        {
+            try
+            {
+                if (!IsUserAuthenticated())
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+
+                var userId = GetUserId();
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Unauthorized();
+                }
+
+                for (int i = 0; i < quantity; i++)
+                {
+                    await cartService.AddProductToUserCartAsync(userId, id);
+                }
+
+                return RedirectToAction("Index", "Cart");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return this.RedirectToAction(nameof(Index), "Home");
+            }
+        }
+
+        [HttpPost]
         public async Task<IActionResult> Delete(DeleteProductFromCartViewModel model)
         {
             try
