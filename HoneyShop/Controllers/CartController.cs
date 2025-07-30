@@ -40,7 +40,7 @@
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Add(Guid id)
         {
             try

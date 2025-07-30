@@ -123,10 +123,9 @@
                                     <div class="pro-qty">
                                         <input type="text" value="1">
                                     </div>
-                                    <form asp-controller="Cart" asp-action="Add" method="post">
-                                        <input type="hidden" name="id" value="@Model.Id" />
-                                        <button type="submit" class="primary-btn pd-cart">Add To Cart</button>
-                                    </form>
+                                    <a asp-controller="Cart" asp-action="Add" asp-route-id="@Model.Id" class="primary-btn pd-cart" style="display:inline;">
+                                        <i class="icon_bag_alt"></i>Add To Cart
+                                    </a>
                                 </div>
                             }
                             <ul class="pd-tags">
