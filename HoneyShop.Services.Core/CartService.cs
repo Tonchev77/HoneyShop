@@ -27,8 +27,6 @@
 
         public async Task<bool> AddProductToUserCartAsync(string userId, Guid productId)
         {
-            bool opResult = false;
-
             // Find user
             ApplicationUser? user = await this.userManager.FindByIdAsync(userId);
 
@@ -56,13 +54,40 @@
                     await this.cartRepository.SaveChangesAsync();
                 }
 
-                // Check for existing cart item
-                CartItem? userCartItem = await cartsItemsRepository
-                    .SingleOrDefaultAsync(ur => ur.CartId == userCart.Id && ur.ProductId == productId && !ur.IsDeleted);
 
-                if (userCartItem == null)
+                var allCartItems = await cartsItemsRepository.GetAllAttached()
+                    .IgnoreQueryFilters()
+                    .Where(ci => ci.CartId == userCart.Id && ci.ProductId == productId)
+                    .ToListAsync();
+
+                if (allCartItems.Any())
                 {
-                    userCartItem = new CartItem()
+                    // Item exists (active or deleted)
+                    var cartItem = allCartItems.First();
+
+                    if (cartItem.IsDeleted)
+                    {
+                        // Restore the deleted item
+                        cartItem.IsDeleted = false;
+                        cartItem.DeletedAt = null;
+                        cartItem.Quantity = 1; // Reset quantity
+                    }
+                    else
+                    {
+                        // Increment quantity for active item
+                        cartItem.Quantity += 1;
+                    }
+
+                    // Use Update instead of Add
+                    cartsItemsRepository.Update(cartItem);
+                    await cartsItemsRepository.SaveChangesAsync();
+
+                    return true;
+                }
+                else
+                {
+                    // Item doesn't exist at all, create a new one
+                    var newCartItem = new CartItem
                     {
                         CartId = userCart.Id,
                         ProductId = productId,
@@ -70,21 +95,47 @@
                         IsDeleted = false,
                         DeletedAt = null
                     };
-                    await cartsItemsRepository.AddAsync(userCartItem);
-                    opResult = true;
-                }
-                else
-                {
-                    // Increment quantity if already exists
-                    userCartItem.Quantity += 1;
-                    cartsItemsRepository.Update(userCartItem);
-                    opResult = true;
-                }
 
-                await cartsItemsRepository.SaveChangesAsync();
+                    await cartsItemsRepository.AddAsync(newCartItem);
+                    await cartsItemsRepository.SaveChangesAsync();
+
+                    return true;
+                }
             }
 
-            return opResult;
+            return false;
+        }
+
+        public async Task<bool> DeleteProductFromCartAsync(string userId, DeleteProductFromCartViewModel model)
+        {
+            // Find user's cart
+            Cart? userCart = await this.cartRepository
+                .SingleOrDefaultAsync(c => c.UserId.ToLower() == userId.ToLower() && !c.IsDeleted);
+
+            if (userCart == null || userCart.Id != model.CartId)
+            {
+                return false;
+            }
+
+            // Find the cart item to delete
+            CartItem? cartItem = await this.cartsItemsRepository
+                .SingleOrDefaultAsync(ci => ci.CartId == model.CartId &&
+                                            ci.ProductId == model.ProductId &&
+                                            !ci.IsDeleted);
+
+            if (cartItem == null)
+            {
+                return false;
+            }
+
+            // Mark as deleted
+            cartItem.IsDeleted = true;
+            cartItem.DeletedAt = DateTime.UtcNow;
+
+            this.cartsItemsRepository.Update(cartItem);
+            await this.cartsItemsRepository.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<IEnumerable<GetAllCartItemsViewModel>> GetAllCartProductsAsync(string userId)

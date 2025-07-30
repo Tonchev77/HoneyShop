@@ -66,7 +66,16 @@
                                         <td class="total-price first-row" id="total-@cartItem.ProductDetails.Id">
                                             $@(cartItem.ProductDetails.Price* cartItem.Quantity)
                                         </td>
-                                        <td class="close-td first-row"><i class="ti-close"></i></td>
+                                        <td class="close-td first-row">
+                                            <form asp-controller="Cart" asp-action="Delete" method="post">
+                                                <input type="hidden" name="CartId" value="@cartItem.CartId" />
+                                                <input type="hidden" name="ProductId" value="@cartItem.ProductId" />
+                                                <input type="hidden" name="Quantity" value="@cartItem.Quantity" />
+                                                <button type="submit" class="btn btn-link p-0">
+                                                    <i class="ti-close"></i>
+                                                </button>
+                                            </form>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -74,6 +83,15 @@
                     </div>
                 }
                 <div class="row">
+                    <div class="col-lg-4 offset-lg-4">
+                        <div class="proceed-checkout">
+                            <ul>
+                                <li class="subtotal">Subtotal <span>$240.00</span></li>
+                                <li class="cart-total">Total <span>$240.00</span></li>
+                            </ul>
+                            <a href="#" class="proceed-btn">PROCEED TO CHECK OUT</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

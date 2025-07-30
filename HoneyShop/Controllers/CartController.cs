@@ -76,5 +76,32 @@
                 return this.RedirectToAction(nameof(Index), "Home");
             } 
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(DeleteProductFromCartViewModel model)
+        {
+            try
+            {
+                if (!IsUserAuthenticated())
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+
+                string? userId = GetUserId();
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Unauthorized();
+                }
+
+                bool result = await cartService.DeleteProductFromCartAsync(userId, model);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return this.RedirectToAction(nameof(Index), "Home");
+            }
+        }
     }
 }
