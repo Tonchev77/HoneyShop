@@ -2,7 +2,7 @@
 @model GetProductDetailViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Product Details - " + Model.Name;
 }
 
 <!-- Breadcrumb Section Begin -->
@@ -13,135 +13,118 @@
                 <div class="breadcrumb-text product-more">
                     <a asp-controller="Home" asp-action="Index"><i class="fa fa-home"></i> Home</a>
                     <a asp-controller="Shop" asp-action="Index">Shop</a>
-                    <span>Details</span>
+                    <span>@Model.Name</span>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- Breadcrumb Section Begin -->
-
-<!-- Product Shop Section Begin -->
-<section class="product-shop spad page-details">
+<!-- Breadcrumb Section End -->
+<!-- Product Detail Section Begin -->
+<section class="product-detail-section spad">
     <div class="container">
         <div class="row">
-            <div class="col-lg-3">
-                <div class="filter-widget">
-                    <h4 class="fw-title">Categories</h4>
-                    <ul class="filter-catagories">
-                        <li><a href="#">Men</a></li>
-                        <li><a href="#">Women</a></li>
-                        <li><a href="#">Kids</a></li>
-                    </ul>
-                </div>
-                <div class="filter-widget">
-                    <h4 class="fw-title">Brand</h4>
-                    <div class="fw-brand-check">
-                        <div class="bc-item">
-                            <label for="bc-calvin">
-                                Calvin Klein
-                                <input type="checkbox" id="bc-calvin">
-                                <span class="checkmark"></span>
-                            </label>
-                        </div>
-                        <div class="bc-item">
-                            <label for="bc-diesel">
-                                Diesel
-                                <input type="checkbox" id="bc-diesel">
-                                <span class="checkmark"></span>
-                            </label>
-                        </div>
-                        <div class="bc-item">
-                            <label for="bc-polo">
-                                Polo
-                                <input type="checkbox" id="bc-polo">
-                                <span class="checkmark"></span>
-                            </label>
-                        </div>
-                        <div class="bc-item">
-                            <label for="bc-tommy">
-                                Tommy Hilfiger
-                                <input type="checkbox" id="bc-tommy">
-                                <span class="checkmark"></span>
-                            </label>
-                        </div>
+            <!-- Product Image -->
+            <div class="col-lg-6">
+                <div class="product-pic-zoom shadow-sm rounded">
+                    <img class="product-big-img img-fluid" src="@Model.ImageUrl" alt="@Model.Name">
+                    <div class="zoom-icon">
+                        <i class="fa fa-search-plus"></i>
                     </div>
-                </div>
-                <div class="filter-widget">
-                    <h4 class="fw-title">Price</h4>
-                    <div class="filter-range-wrap">
-                        <div class="range-slider">
-                            <div class="price-input">
-                                <input type="text" id="minamount">
-                                <input type="text" id="maxamount">
-                            </div>
-                        </div>
-                        <div class="price-range ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"
-                             data-min="33" data-max="98">
-                            <div class="ui-slider-range ui-corner-all ui-widget-header"></div>
-                            <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
-                            <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
-                        </div>
-                    </div>
-                    <a href="#" class="filter-btn">Filter</a>
                 </div>
             </div>
-            <div class="col-lg-9">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="product-pic-zoom">
-                            <img class="product-big-img" src="@Model.ImageUrl" alt="">
-                            <div class="zoom-icon">
-                                <i class="fa fa-search-plus"></i>
-                            </div>
-                        </div>
+
+            <!-- Product Details -->
+            <div class="col-lg-6">
+                <div class="product-details">
+                    <div class="pd-title">
+                        <span class="category-tag">@Model.Category.Name</span>
+                        <h2 class="mt-3 mb-3">@Model.Name</h2>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="product-details">
-                            <div class="pd-title">
-                                <span>oranges</span>
-                                <h3>@Model.Name</h3>
-                                <a href="#" class="heart-icon"><i class="icon_heart_alt"></i></a>
+
+                    <div class="pd-rating mb-3">
+                        <i class="fa fa-star text-warning"></i>
+                        <i class="fa fa-star text-warning"></i>
+                        <i class="fa fa-star text-warning"></i>
+                        <i class="fa fa-star text-warning"></i>
+                        <i class="fa fa-star-o text-warning"></i>
+                        <span class="ml-2">(5 Reviews)</span>
+                    </div>
+
+                    <div class="pd-price mb-4">
+                        <h3>$@Model.Price.ToString("F2") <span>629.99</span></h3>
+                    </div>
+
+                    <div class="pd-desc mb-4">
+                        <p>@Model.Description</p>
+                    </div>
+
+                    <!-- Availability -->
+                    <div class="pd-availability mb-4">
+                        <h5>Availability:</h5>
+                        @if (Model.IsActive)
+                        {
+                            <span class="badge bg-success text-white p-2"><i class="fa fa-check mr-1"></i> In Stock</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger text-white p-2"><i class="fa fa-times mr-1"></i> Out of Stock</span>
+                        }
+                    </div>
+
+                    <!-- Add to Cart -->
+                    @if ((User?.Identity?.IsAuthenticated == true) && (Model.IsActive == true))
+                    {
+                        <form asp-controller="Cart" asp-action="Add" method="post" id="addToCartForm" class="mb-4">
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <div class="quantity d-flex align-items-center">
+                                <div class="pro-qty mr-3">
+                                    <input type="text" id="quantity" name="quantity" value="1">
+                                </div>
+                                <button type="submit" class="primary-btn pd-cart">
+                                    <i class="icon_bag_alt mr-2"></i>Add To Cart
+                                </button>
                             </div>
-                            <div class="pd-rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-o"></i>
-                                <span>(5)</span>
-                            </div>
-                            <div class="pd-desc">
-                                <p>
-                                    @Model.Description
-                                </p>
-                                <h4>@Model.Price<span>629.99</span></h4>
-                            </div>
-                            @if ((User?.Identity?.IsAuthenticated == true) && (Model.IsActive == true))
-                            {
-                                <form asp-controller="Cart" asp-action="Add" method="post" id="addToCartForm">
-                                    <input type="hidden" name="id" value="@Model.Id" />
-                                    <div class="quantity">
-                                        <div class="pro-qty">
-                                            <input type="text" id="productQuantity" value="1" name="quantity">
-                                        </div>
-                                        <button type="submit" class="primary-btn pd-cart" style="display:inline;">
-                                            <i class="icon_bag_alt"></i>Add To Cart
-                                        </button>
-                                    </div>
-                                </form>
-                            }
-                            <ul class="pd-tags">
-                                <li><span>CATEGORY</span>: @Model.Category.Name</li>
-                            </ul>
+                        </form>
+                    }
+                    else if (!User?.Identity?.IsAuthenticated == true)
+                    {
+                        <div class="alert alert-info">
+                            <i class="fa fa-info-circle mr-2"></i> Please <a asp-area="Identity" asp-page="/Account/Login" class="alert-link">login</a> to add this product to your cart.
+                        </div>
+                    }
+                    else if (!Model.IsActive)
+                    {
+                        <div class="alert alert-warning">
+                            <i class="fa fa-exclamation-triangle mr-2"></i> This product is currently out of stock.
+                        </div>
+                    }
+
+                    <!-- Product Meta -->
+                    <div class="pd-share">
+                        <div class="p-code">Share:</div>
+                        <div class="pd-social">
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="#"><i class="fa fa-linkedin"></i></a>
+                            <a href="#"><i class="fa fa-pinterest"></i></a>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Product Description Tabs -->
+        <div class="row mt-5">
+            <div class="col-lg-12">
                 <div class="product-tab">
                     <div class="tab-item">
                         <ul class="nav" role="tablist">
                             <li>
                                 <a class="active" data-toggle="tab" href="#tab-1" role="tab">DESCRIPTION</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#tab-2" role="tab">SPECIFICATIONS</a>
                             </li>
                         </ul>
                     </div>
@@ -150,25 +133,40 @@
                             <div class="tab-pane fade-in active" id="tab-1" role="tabpanel">
                                 <div class="product-content">
                                     <div class="row">
-                                        <div class="col-lg-7">
-                                            <h5>Introduction</h5>
+                                        <div class="col-lg-12">
+                                            <h5>About This Product</h5>
+                                            <p>@Model.Description</p>
                                             <p>
-                                                @Model.Description
+                                                Our honey is carefully harvested and processed to preserve all the natural goodness.
+                                                It's perfect for sweetening your tea, spreading on toast, or as a natural remedy for sore throats.
                                             </p>
-                                            <h5>Availability</h5>
-                                            @if (Model.IsActive) 
-                                            {
-                                                <p style="color: #28a745; font-weight: bold;" >
-                                                    Available
-                                                </p>
-                                            }
-                                            else
-                                            {
-                                                <p style="color: #dc3545; font-weight: bold;">
-                                                    NOT AVAILABLE!
-                                                </p>
-                                            }
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="tab-2" role="tabpanel">
+                                <div class="product-content">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <h5>Product Specifications</h5>
+                                            <table class="table table-striped">
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Category</td>
+                                                        <td>@Model.Category.Name</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Origin</td>
+                                                        <td>Bulgaria</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Harvested</td>
+                                                        <td>2025</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -176,7 +174,146 @@
                 </div>
             </div>
         </div>
-        </div>
     </div>
 </section>
-<!-- Product Shop Section End -->
+<!-- Product Detail Section End -->
+
+<style>
+    /* Custom styles for product detail page */
+    .product-detail-section {
+        padding-top: 70px;
+        padding-bottom: 70px;
+    }
+
+    .product-pic-zoom {
+        overflow: hidden;
+        position: relative;
+    }
+
+    .product-big-img {
+        transition: transform .5s ease;
+        max-height: 500px;
+        object-fit: contain;
+        width: 100%;
+    }
+
+    .product-pic-zoom:hover .product-big-img {
+        transform: scale(1.05);
+    }
+
+    .pd-title h2 {
+        color: #252525;
+        font-weight: 700;
+    }
+
+    /* Original category tag style */
+    .category-tag {
+        color: #e7ab3c;
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 10px;
+        display: inline-block;
+    }
+
+    /* Original price style */
+    .pd-price h3 {
+        color: #e7ab3c;
+        font-weight: 700;
+        margin-bottom: 0;
+    }
+
+        .pd-price h3 span {
+            font-size: 14px;
+            color: #b7b7b7;
+            text-decoration: line-through;
+            margin-left: 10px;
+            display: inline-block;
+        }
+
+    /* Original social media styles */
+    .pd-share {
+        margin-top: 20px;
+        overflow: hidden;
+    }
+
+        .pd-share .p-code {
+            font-size: 14px;
+            color: #252525;
+            float: left;
+            margin-right: 10px;
+            line-height: 32px;
+        }
+
+        .pd-share .pd-social {
+            float: left;
+        }
+
+            .pd-share .pd-social a {
+                display: inline-block;
+                width: 32px;
+                height: 32px;
+                line-height: 32px;
+                text-align: center;
+                margin-right: 5px;
+                background: #efefef;
+                color: #252525;
+                border-radius: 50%;
+            }
+
+    /* Original quantity input style */
+    .pro-qty {
+        width: 140px;
+        height: 50px;
+        border: 1px solid #ebebeb;
+        text-align: center;
+        position: relative;
+    }
+
+        .pro-qty input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            text-align: center;
+        }
+
+    .product-tab {
+        margin-top: 30px;
+    }
+
+        .product-tab .nav {
+            border-bottom: 2px solid #ebebeb;
+        }
+
+            .product-tab .nav li {
+                margin-right: 45px;
+            }
+
+                .product-tab .nav li a {
+                    display: inline-block;
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: #b7b7b7;
+                    padding-bottom: 10px;
+                    position: relative;
+                }
+
+                    .product-tab .nav li a.active {
+                        color: #e7ab3c;
+                    }
+
+                        .product-tab .nav li a.active:after {
+                            position: absolute;
+                            content: "";
+                            left: 0;
+                            bottom: -2px;
+                            width: 100%;
+                            height: 2px;
+                            background: #e7ab3c;
+                        }
+
+    .tab-item-content {
+        padding-top: 30px;
+    }
+</style>
