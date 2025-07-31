@@ -116,5 +116,46 @@
                 OrderStatus = order.OrderStatus.Name
             };
         }
+
+        public async Task<IEnumerable<GetAllOrdersForUserViewModel>> GetUserOrdersAsync(string userId)
+        {
+            IEnumerable<Order> orders = await orderRepository
+            .GetAllAttached()
+            .Include(o => o.OrderStatus)
+            .Include(o => o.OrderItems)
+            .ThenInclude(oi => oi.Product)
+            .Where(o => o.UserId == userId && !o.IsDeleted)
+            .OrderByDescending(o => o.OrderDate)
+            .ToListAsync();
+
+            List<GetAllOrdersForUserViewModel> result = new List<GetAllOrdersForUserViewModel>();
+
+            foreach (Order order in orders)
+            {
+                GetAllOrdersForUserViewModel? orderViewModel = new GetAllOrdersForUserViewModel
+                {
+                    Id = order.Id,
+                    OrderDate = order.OrderDate,
+                    TotalAmount = order.TotalAmount,
+                    OrderStatus = order.OrderStatus.Name,
+                    ShippingCity = order.ShippingCity,
+                    ShippingAddress = order.ShippingAddress,
+                    OrderItems = order.OrderItems
+                        .Where(oi => !oi.IsDeleted)
+                        .Select(oi => new OrderItemViewModel
+                        {
+                            ProductId = oi.ProductId,
+                            ProductName = oi.Product.Name,
+                            ProductPrice = oi.UnitPrice,
+                            Quantity = oi.Quantity
+                        })
+                        .ToList()
+                };
+
+                result.Add(orderViewModel);
+            }
+
+            return result;
+        }
     }
 }
