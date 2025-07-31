@@ -1,5 +1,497 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using HoneyShop.ViewModels.Admin.Home
+@model DashboardViewModel
+
 @{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Dashboard</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active">Dashboard</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <!-- Info boxes -->
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-info"><i class="bi bi-clipboard-check"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Total Orders</span>
+                        <span class="info-box-number">@Model.TotalOrders</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-success"><i class="bi bi-currency-dollar"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Total Sales</span>
+                        <span class="info-box-number">$@Model.TotalSales.ToString("N2")</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-warning"><i class="bi bi-box"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Products</span>
+                        <span class="info-box-number">@Model.TotalProducts</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-danger"><i class="bi bi-people-fill"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Customers</span>
+                        <span class="info-box-number">@Model.TotalCustomers</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Status Summary -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Order Status</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-6 col-12">
+                                <div class="small-box bg-warning">
+                                    <div class="inner">
+                                        <h3>@Model.PendingOrders</h3>
+                                        <p>Pending Orders</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="bi bi-hourglass-split"></i>
+                                    </div>
+                                    <a asp-area="Admin" asp-controller="OrderManagment" asp-action="Index" class="small-box-footer">
+                                        View All <i class="bi bi-arrow-right-circle"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-12">
+                                <div class="small-box bg-info">
+                                    <div class="inner">
+                                        <h3>@Model.ConfirmedOrders</h3>
+                                        <p>Confirmed Orders</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="bi bi-check-circle"></i>
+                                    </div>
+                                    <a asp-area="Admin" asp-controller="OrderManagment" asp-action="Index" class="small-box-footer">
+                                        View All <i class="bi bi-arrow-right-circle"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-12">
+                                <div class="small-box bg-primary">
+                                    <div class="inner">
+                                        <h3>@Model.ShippedOrders</h3>
+                                        <p>Shipped Orders</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="bi bi-truck"></i>
+                                    </div>
+                                    <a asp-area="Admin" asp-controller="OrderManagment" asp-action="Index" class="small-box-footer">
+                                        View All <i class="bi bi-arrow-right-circle"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 col-12">
+                                <div class="small-box bg-success">
+                                    <div class="inner">
+                                        <h3>@Model.CompletedOrders</h3>
+                                        <p>Completed Orders</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="bi bi-check2-all"></i>
+                                    </div>
+                                    <a asp-area="Admin" asp-controller="OrderManagment" asp-action="Index" class="small-box-footer">
+                                        View All <i class="bi bi-arrow-right-circle"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Orders and Sales Chart -->
+        <div class="row">
+            <!-- Recent Orders -->
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header border-transparent">
+                        <h3 class="card-title">Recent Orders</h3>
+                        <div class="card-tools">
+                            <a asp-area="Admin" asp-controller="OrderManagment" asp-action="Index" class="btn btn-tool">
+                                <i class="bi bi-arrow-right-circle"></i> View All
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table m-0">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.RecentOrders.Any())
+                                    {
+                                        @foreach (RecentOrderViewModel order in Model.RecentOrders)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <a asp-area="Admin" asp-controller="OrderManagment" asp-action="Details" asp-route-id="@order.Id">
+                                                        #@order.Id.ToString().Substring(0, 8)
+                                                    </a>
+                                                </td>
+                                                <td>@order.CustomerName</td>
+                                                <td>
+                                                    @{
+                                                        string badgeClass = order.OrderStatus switch
+                                                        {
+                                                            "Pending" => "badge bg-warning",
+                                                            "Confirmed" => "badge bg-info",
+                                                            "Sent" => "badge bg-primary",
+                                                            "Finished" => "badge bg-success",
+                                                            _ => "badge bg-secondary"
+                                                        };
+                                                    }
+                                                    <span class="@badgeClass">@order.OrderStatus</span>
+                                                </td>
+                                                <td>@order.OrderDate.ToString("MMM dd, yyyy")</td>
+                                                <td>$@order.TotalAmount.ToString("N2")</td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="5" class="text-center">No recent orders</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sales Summary -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Sales Summary</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
+                            <p class="text-success text-xl">
+                                <i class="bi bi-calendar-date me-2"></i>
+                            </p>
+                            <p class="d-flex flex-column text-end">
+                                <span class="font-weight-bold">
+                                    $@Model.DailySales.ToString("N2")
+                                </span>
+                                <span class="text-muted">Daily Sales</span>
+                            </p>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center border-bottom mb-3">
+                            <p class="text-primary text-xl">
+                                <i class="bi bi-calendar-week me-2"></i>
+                            </p>
+                            <p class="d-flex flex-column text-end">
+                                <span class="font-weight-bold">
+                                    $@Model.WeeklySales.ToString("N2")
+                                </span>
+                                <span class="text-muted">Weekly Sales</span>
+                            </p>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p class="text-danger text-xl">
+                                <i class="bi bi-calendar me-2"></i>
+                            </p>
+                            <p class="d-flex flex-column text-end">
+                                <span class="font-weight-bold">
+                                    $@Model.MonthlySales.ToString("N2")
+                                </span>
+                                <span class="text-muted">Monthly Sales</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Best Selling Products and Warehouses -->
+        <div class="row">
+            <!-- Best Selling Products -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Best Selling Products</h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <ul class="products-list product-list-in-card px-2">
+                            @foreach (BestSellingProductViewModel product in Model.BestSellingProducts)
+                            {
+                                <li class="item d-flex align-items-center">
+                                    <div class="product-img me-3">
+                                        <img src="@product.ImageUrl" alt="@product.Name" class="img-size-50 img-thumbnail">
+                                    </div>
+                                    <div class="product-info flex-grow-1">
+                                        <a href="javascript:void(0)" class="product-title text-decoration-none">
+                                            @product.Name
+                                            <span class="badge bg-success float-end">$@product.Price.ToString("N2")</span>
+                                        </a>
+                                        <span class="product-description d-block mt-1 small text-muted">
+                                            Total Sold: @product.TotalSold items - Revenue: $@product.TotalRevenue.ToString("N2")
+                                        </span>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a asp-area="Admin" asp-controller="ProductManagment" asp-action="Index" class="text-decoration-none">
+                            View All Products
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Warehouse Summary -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Warehouse Stock Summary</h3>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Warehouse</th>
+                                    <th>Location</th>
+                                    <th>Products</th>
+                                    <th>Stock</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var warehouse in Model.WarehouseSummaries)
+                                {
+                                    <tr>
+                                        <td>@warehouse.Name</td>
+                                        <td>@warehouse.Location</td>
+                                        <td>@warehouse.TotalProducts</td>
+                                        <td>@warehouse.TotalStock</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a asp-area="Admin" asp-controller="WarehouseManagment" asp-action="Index" class="text-decoration-none">
+                            View All Warehouses
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory Alert -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-warning">
+                        <h3 class="card-title">Inventory Alerts</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="info-box bg-light">
+                                    <span class="info-box-icon bg-warning"><i class="bi bi-exclamation-triangle"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Low Stock Products</span>
+                                        <span class="info-box-number">@Model.LowStockProducts</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-box bg-light">
+                                    <span class="info-box-icon bg-danger"><i class="bi bi-x-octagon"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Out of Stock Products</span>
+                                        <span class="info-box-number">@Model.OutOfStockProducts</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<style>
+    .products-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .products-list .item {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+        padding: 10px;
+    }
+
+    .products-list .item:last-child {
+        border-bottom: none;
+    }
+
+    .product-img img {
+        height: 50px;
+        width: 50px;
+        object-fit: cover;
+        border-radius: 4px;
+    }
+
+    .product-title {
+        font-weight: 600;
+        color: #343a40;
+        display: block;
+    }
+
+    .product-description {
+        color: #6c757d;
+        font-size: 0.875rem;
+    }
+
+    .products-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .products-list .item {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+        padding: 10px;
+    }
+
+    .products-list .item:last-child {
+        border-bottom: none;
+    }
+
+    .product-img img {
+        height: 50px;
+        width: 50px;
+        object-fit: cover;
+        border-radius: 4px;
+    }
+
+    .product-title {
+        font-weight: 600;
+        color: #343a40;
+        display: block;
+    }
+
+    .product-description {
+        color: #6c757d;
+        font-size: 0.875rem;
+    }
+
+    /* Order status box styles */
+    .small-box {
+        border-radius: 0.25rem;
+        box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+        display: block;
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    .small-box .inner {
+        padding: 10px;
+    }
+
+    .small-box .icon {
+        color: rgba(255,255,255,.7);
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        transition: all .3s linear;
+        z-index: 0;
+    }
+
+    .small-box .icon i {
+        font-size: 50px;
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        transition: all .3s linear;
+    }
+
+    .small-box:hover .icon i {
+        font-size: 60px;
+    }
+
+    .small-box h3 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin: 0 0 10px;
+        white-space: nowrap;
+        z-index: 5;
+    }
+
+    .small-box p {
+        font-size: 1rem;
+        z-index: 5;
+        position: relative;
+    }
+
+    .small-box .small-box-footer {
+        background-color: rgba(0,0,0,.1);
+        color: rgba(255,255,255,.8);
+        display: block;
+        padding: 3px 0;
+        position: relative;
+        text-align: center;
+        text-decoration: none;
+        z-index: 10;
+    }
+
+    .small-box .small-box-footer:hover {
+        background-color: rgba(0,0,0,.15);
+        color: #fff;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Any dashboard-specific JavaScript can go here
+        });
+    </script>
 }

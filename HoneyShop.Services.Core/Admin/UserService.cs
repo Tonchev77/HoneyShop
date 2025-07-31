@@ -2,6 +2,7 @@
 {
     using HoneyShop.Data.Models;
     using HoneyShop.Services.Core.Admin.Contracts;
+    using HoneyShop.ViewModels.Admin.Home;
     using HoneyShop.ViewModels.Admin.UserManagement;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
@@ -92,6 +93,21 @@
         public Task<bool> SoftDeleteUserAsync(string userId, UserManagementIndexViewModel inputModel)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<CustomerStatisticsViewModel> GetCustomerStatisticsAsync()
+        {
+            IEnumerable<ApplicationUser> users = await userManager.Users.ToListAsync();
+            System.DateTime firstDayOfMonth = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
+
+            CustomerStatisticsViewModel? stats = new CustomerStatisticsViewModel
+            {
+                TotalCustomers = users.Count(),
+                // Count users created this month
+                NewCustomersThisMonth = users.Count(u => u.CreatedAt >= firstDayOfMonth)
+            };
+
+            return stats;
         }
     }
 }

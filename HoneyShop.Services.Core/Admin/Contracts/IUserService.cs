@@ -1,5 +1,6 @@
 ﻿namespace HoneyShop.Services.Core.Admin.Contracts
 {
+    using HoneyShop.ViewModels.Admin.Home;
     using HoneyShop.ViewModels.Admin.UserManagement;
     public interface IUserService
     {
@@ -11,5 +12,7 @@
 
         //TODO
         Task<bool> SoftDeleteUserAsync(string userId, UserManagementIndexViewModel inputModel);
+
+        Task<CustomerStatisticsViewModel> GetCustomerStatisticsAsync();
     }
 }

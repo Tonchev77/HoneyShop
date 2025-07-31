@@ -4,6 +4,8 @@
     public class ApplicationUser : IdentityUser
     {
         public virtual Manager? Manager { get; set; }
+
+        public DateTime CreatedAt { get; set; }
         public virtual ICollection<Cart> Carts { get; set; } 
             = new HashSet<Cart>();
         public virtual ICollection<Order> Orders { get; set; } 

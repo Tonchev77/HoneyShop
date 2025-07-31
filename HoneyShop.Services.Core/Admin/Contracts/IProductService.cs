@@ -1,5 +1,6 @@
 ﻿namespace HoneyShop.Services.Core.Admin.Contracts
 {
+    using HoneyShop.ViewModels.Admin.Home;
     using HoneyShop.ViewModels.Admin.ProductManagment;
     public interface IProductService
     {
@@ -14,5 +15,8 @@
         Task<DeleteProductManagmentViewModel?> GetProductForDeleteAsync(Guid? productId);
 
         Task<bool> SoftDeleteProductAsync(DeleteProductManagmentViewModel inputModel);
+
+        Task<ProductStatisticsViewModel> GetProductStatisticsAsync();
+        Task<IEnumerable<BestSellingProductViewModel>> GetBestSellingProductsAsync(int count = 5);
     }
 }

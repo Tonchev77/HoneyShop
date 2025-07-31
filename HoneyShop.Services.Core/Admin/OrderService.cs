@@ -3,6 +3,7 @@
     using HoneyShop.Data.Models;
     using HoneyShop.Data.Repository.Interfaces;
     using HoneyShop.Services.Core.Admin.Contracts;
+    using HoneyShop.ViewModels.Admin.Home;
     using HoneyShop.ViewModels.Admin.OrderManagment;
     using Microsoft.EntityFrameworkCore;
 
@@ -124,6 +125,56 @@
             order.OrderStatusId = statusId;
             await orderRepository.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<DashboardOrderStats> GetOrderStatisticsAsync()
+        {
+            System.DateTime today = DateTime.UtcNow.Date;
+            System.DateTime startOfWeek = today.AddDays(-(int)today.DayOfWeek);
+            System.DateTime startOfMonth = new System.DateTime(today.Year, today.Month, 1);
+
+            IEnumerable<Order> allOrders = await orderRepository
+                .GetAllAttached()
+                .Include(o => o.OrderStatus)
+                .Where(o => !o.IsDeleted)
+                .ToListAsync();
+
+            DashboardOrderStats? stats = new DashboardOrderStats
+            {
+                TotalOrders = allOrders.Count(),
+                PendingOrders = allOrders.Count(o => o.OrderStatus.Name == "Pending"),
+                ConfirmedOrders = allOrders.Count(o => o.OrderStatus.Name == "Confirmed"),
+                SentOrders = allOrders.Count(o => o.OrderStatus.Name == "Sent"),
+                FinishedOrders = allOrders.Count(o => o.OrderStatus.Name == "Finished"),
+                TotalSales = allOrders.Sum(o => o.TotalAmount),
+                DailySales = allOrders.Where(o => o.OrderDate.Date == today).Sum(o => o.TotalAmount),
+                WeeklySales = allOrders.Where(o => o.OrderDate >= startOfWeek).Sum(o => o.TotalAmount),
+                MonthlySales = allOrders.Where(o => o.OrderDate >= startOfMonth).Sum(o => o.TotalAmount)
+            };
+
+            return stats;
+        }
+
+        public async Task<IEnumerable<RecentOrderViewModel>> GetRecentOrdersAsync(int count = 5)
+        {
+            IEnumerable<RecentOrderViewModel> recentOrders = await orderRepository
+                .GetAllAttached()
+                .Include(o => o.OrderStatus)
+                .Include(o => o.User)
+                .Where(o => !o.IsDeleted)
+                .OrderByDescending(o => o.OrderDate)
+                .Take(count)
+                .Select(o => new RecentOrderViewModel
+                {
+                    Id = o.Id,
+                    CustomerName = o.User.UserName ?? o.User.Email!,
+                    OrderDate = o.OrderDate,
+                    TotalAmount = o.TotalAmount,
+                    OrderStatus = o.OrderStatus.Name
+                })
+                .ToListAsync();
+
+            return recentOrders;
         }
     }
 }

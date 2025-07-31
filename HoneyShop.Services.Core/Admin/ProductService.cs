@@ -1,9 +1,11 @@
 ﻿namespace HoneyShop.Services.Core.Admin
 {
     using HoneyShop.Data.Models;
+    using HoneyShop.Data.Repository;
     using HoneyShop.Data.Repository.Interfaces;
     using HoneyShop.Services.Core.Admin.Contracts;
     using HoneyShop.ViewModels.Admin.CategoryManagment;
+    using HoneyShop.ViewModels.Admin.Home;
     using HoneyShop.ViewModels.Admin.ProductManagment;
     using HoneyShop.ViewModels.Home;
     using Microsoft.AspNetCore.Identity;
@@ -13,13 +15,16 @@
     {
         private readonly IProductRepository productRepository;
         private readonly ICategoryRepository categoryRepository;
+        private readonly IOrderItemRepository orderItemRepository;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public ProductService(IProductRepository productRepository, ICategoryRepository categoryRepository, UserManager<ApplicationUser> userManager)
+        public ProductService(IProductRepository productRepository, ICategoryRepository categoryRepository, 
+            UserManager<ApplicationUser> userManager, IOrderItemRepository orderItemRepository)
         {
             this.productRepository = productRepository;
             this.categoryRepository = categoryRepository;
             this.userManager = userManager;
+            this.orderItemRepository = orderItemRepository;
         }
 
         public async Task<bool> AddProductAsync(string userId, AddProductViewModel inputModel)
@@ -180,6 +185,65 @@
             }
 
             return opResult;
+        }
+
+        public async Task<ProductStatisticsViewModel> GetProductStatisticsAsync()
+        {
+            IEnumerable<Product> products = await productRepository
+                .GetAllAttached()
+                .Include(p => p.ProductStocks)
+                .Where(p => !p.IsDeleted)
+                .ToListAsync();
+
+            var productsWithStock = products.Select(p => new
+            {
+                Product = p,
+                TotalStock = p.ProductStocks.Where(ps => !ps.IsDeleted).Sum(ps => ps.Quantity)
+            }).ToList();
+
+            ProductStatisticsViewModel? stats = new ProductStatisticsViewModel
+            {
+                TotalProducts = products.Count(),
+
+                LowStockProducts = productsWithStock.Count(p => p.TotalStock > 0 && p.TotalStock < 10),
+ 
+                OutOfStockProducts = productsWithStock.Count(p => p.TotalStock == 0)
+            };
+
+            return stats;
+        }
+
+        public async Task<IEnumerable<BestSellingProductViewModel>> GetBestSellingProductsAsync(int count = 5)
+        {
+            var bestSellers = await orderItemRepository
+                .GetAllAttached()
+                .Where(oi => !oi.IsDeleted)
+                .Include(oi => oi.Product)
+                .Include(oi => oi.Order)
+                .Where(oi => !oi.Order.IsDeleted)
+                .GroupBy(oi => oi.ProductId)
+                .Select(g => new
+                {
+                    ProductId = g.Key,
+                    Product = g.First().Product,
+                    TotalSold = g.Sum(oi => oi.Quantity),
+                    TotalRevenue = g.Sum(oi => oi.Quantity * oi.UnitPrice)
+                })
+                .OrderByDescending(x => x.TotalSold)
+                .Take(count)
+                .ToListAsync();
+
+            IEnumerable<BestSellingProductViewModel> bestSellingProducts = bestSellers.Select(bs => new BestSellingProductViewModel
+            {
+                Id = bs.ProductId,
+                Name = bs.Product.Name,
+                ImageUrl = bs.Product.ImageUrl,
+                Price = bs.Product.Price,
+                TotalSold = bs.TotalSold,
+                TotalRevenue = bs.TotalRevenue
+            }).ToList();
+
+            return bestSellingProducts;
         }
     }
 }
