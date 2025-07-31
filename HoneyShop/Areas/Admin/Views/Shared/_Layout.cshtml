@@ -65,7 +65,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a asp-controller="OrderManagment" asp-action="Index" class="nav-link">
                                 <i class="nav-icon bi bi-clipboard-fill"></i> <p>
                                     Orders
                                     <span class="nav-badge badge text-bg-secondary me-3"></span>
@@ -175,5 +175,6 @@
           });
         });
     </script> <!--end::Script-->
+    @RenderSection("Scripts", required: false)
 </body><!--end::Body-->
 </html>

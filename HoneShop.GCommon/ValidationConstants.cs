@@ -70,6 +70,8 @@
 
             public const int DescriptionMaxLength = 200;
 
+            public const string OrderStatusMessageRequired = "Order status is required";
+
         }
 
         public static class Category

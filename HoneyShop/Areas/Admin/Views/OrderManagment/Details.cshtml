@@ -1,0 +1,336 @@
+﻿@using HoneyShop.ViewModels.Admin.OrderManagment
+@model OrderDetailsViewModel
+@{
+    ViewData["Title"] = "Order Details";
+    var statuses = (IEnumerable<HoneyShop.ViewModels.Admin.OrderManagment.OrderStatusViewModel>)ViewData["Statuses"]!;
+}
+
+<!--begin::Content Container-->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Order Details</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-controller="OrderManagment" asp-action="Index">Orders</a></li>
+                    <li class="breadcrumb-item active">Order Details</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Order Information -->
+            <div class="col-md-6">
+                <div class="card card-primary card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">Order Information</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>Order ID:</strong>
+                            </div>
+                            <div class="col-6">
+                                @Model.Id
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>Order Date:</strong>
+                            </div>
+                            <div class="col-6">
+                                @Model.OrderDate.ToString("MMM dd, yyyy HH:mm")
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>Status:</strong>
+                            </div>
+                            <div class="col-6">
+                                @{
+                                    string badgeClass = Model.OrderStatus switch
+                                    {
+                                        "Pending" => "badge bg-warning",
+                                        "Confirmed" => "badge bg-info",
+                                        "Sent" => "badge bg-primary",
+                                        "Finished" => "badge bg-success",
+                                        _ => "badge bg-secondary"
+                                    };
+                                }
+                                <span class="@badgeClass">@Model.OrderStatus</span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>Total Amount:</strong>
+                            </div>
+                            <div class="col-6">
+                                $@Model.TotalAmount.ToString("F2")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Information -->
+            <div class="col-md-6">
+                <div class="card card-info card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">Customer Information</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>Customer Name:</strong>
+                            </div>
+                            <div class="col-6">
+                                @Model.UserName
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>Email:</strong>
+                            </div>
+                            <div class="col-6">
+                                @Model.UserEmail
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>Shipping City:</strong>
+                            </div>
+                            <div class="col-6">
+                                @Model.ShippingCity
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>Shipping Address:</strong>
+                            </div>
+                            <div class="col-6">
+                                @Model.ShippingAddress
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Update Status -->
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <div class="card card-warning card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">Update Order Status</h3>
+                    </div>
+                    <div class="card-body">
+                        <form asp-action="UpdateStatus" method="post">
+                            <input type="hidden" name="OrderId" value="@Model.Id" />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="StatusId">Select New Status:</label>
+                                        <select name="StatusId" id="StatusId" class="form-select">
+                                            @foreach (var status in statuses)
+                                            {
+                                                string isSelected = status.Id == Model.OrderStatusId ? "selected" : "";
+                                                <option value="@status.Id" selected="@(status.Id == Model.OrderStatusId)">
+                                                    @status.Name - @(string.IsNullOrEmpty(status.Description) ? "No description" : status.Description)
+                                                </option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 d-flex align-items-end">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-save"></i> Update Status
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Items -->
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <div class="card card-success card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">Order Items</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Unit Price</th>
+                                        <th>Quantity</th>
+                                        <th class="text-right">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.OrderItems)
+                                    {
+                                        <tr>
+                                            <td>@item.ProductName</td>
+                                            <td>$@item.UnitPrice.ToString("F2")</td>
+                                            <td>@item.Quantity</td>
+                                            <td class="text-right">$@item.TotalPrice.ToString("F2")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="3" class="text-right">Total:</th>
+                                        <th class="text-right">$@Model.TotalAmount.ToString("F2")</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Timeline -->
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <div class="card card-secondary card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">Order Progress</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="timeline-container">
+                            @{
+                                var statusPriority = new Dictionary<string, int>
+                                {
+                                    { "Pending", 1 },
+                                    { "Confirmed", 2 },
+                                    { "Sent", 3 },
+                                    { "Finished", 4 }
+                                };
+                                
+                                int currentPriority = statusPriority.TryGetValue(Model.OrderStatus, out int priority) ? priority : 0;
+                            }
+                            
+                            <div class="timeline-step @(currentPriority >= 1 ? "completed" : "")">
+                                <div class="timeline-icon">
+                                    <i class="fa fa-shopping-cart"></i>
+                                </div>
+                                <p>Pending</p>
+                            </div>
+                            <div class="timeline-step @(currentPriority >= 2 ? "completed" : "")">
+                                <div class="timeline-icon">
+                                    <i class="fa fa-check-circle"></i>
+                                </div>
+                                <p>Confirmed</p>
+                            </div>
+                            <div class="timeline-step @(currentPriority >= 3 ? "completed" : "")">
+                                <div class="timeline-icon">
+                                    <i class="fa fa-truck"></i>
+                                </div>
+                                <p>Sent</p>
+                            </div>
+                            <div class="timeline-step @(currentPriority >= 4 ? "completed" : "")">
+                                <div class="timeline-icon">
+                                    <i class="fa fa-flag-checkered"></i>
+                                </div>
+                                <p>Finished</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-12">
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fa fa-arrow-left"></i> Back to Orders
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Timeline styling */
+    .timeline-container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        position: relative;
+    }
+
+    .timeline-container:before {
+        content: '';
+        position: absolute;
+        background: #e9ecef;
+        height: 5px;
+        width: 100%;
+        top: 20px;
+        left: 0;
+        z-index: 0;
+    }
+
+    .timeline-step {
+        text-align: center;
+        position: relative;
+        z-index: 1;
+        flex: 1;
+    }
+
+    .timeline-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #e9ecef;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 10px;
+        color: #6c757d;
+    }
+
+    .timeline-step.completed .timeline-icon {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .timeline-step p {
+        font-size: 14px;
+        margin-top: 5px;
+        color: #6c757d;
+    }
+
+    .timeline-step.completed p {
+        color: #28a745;
+        font-weight: 500;
+    }
+
+    .badge {
+        padding: 0.35em 0.65em;
+    }
+</style>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // You can add any specific JavaScript for this page here
+
+            // For example, you could add script to handle the status change
+            $('#StatusId').on('change', function() {
+                console.log('Status selected:', $(this).val());
+            });
+        });
+    </script>
+}

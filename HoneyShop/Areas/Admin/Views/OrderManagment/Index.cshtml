@@ -1,0 +1,98 @@
+﻿@using HoneyShop.ViewModels.Admin.OrderManagment
+@model IEnumerable<OrderViewModel>
+
+@{
+    ViewData["Title"] = "Order Management";
+}
+
+<!--begin::Content Container-->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Order Management</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active">Orders</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-info card-outline">
+            <div class="card-header">
+                <h3 class="card-title">All Orders</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped" id="ordersTable">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Date</th>
+                                <th>Customer</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model)
+                            {
+                                <tr>
+                                    <td>@order.Id.ToString().Substring(0, 8)...</td>
+                                    <td>@order.OrderDate.ToString("MMM dd, yyyy HH:mm")</td>
+                                    <td>
+                                        <strong>@order.UserName</strong><br />
+                                        <small>@order.UserEmail</small>
+                                    </td>
+                                    <td>
+                                        @{
+                                            string badgeClass = order.OrderStatus switch
+                                            {
+                                                "Pending" => "badge bg-warning",
+                                                "Confirmed" => "badge bg-info",
+                                                "Sent" => "badge bg-primary",
+                                                "Finished" => "badge bg-success",
+                                                _ => "badge bg-secondary"
+                                            };
+                                        }
+                                        <span class="@badgeClass">@order.OrderStatus</span>
+                                    </td>
+                                    <td>$@order.TotalAmount.ToString("F2")</td>
+                                    <td>
+                                        <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-primary btn-sm">
+                                            <i class="fa fa-eye"></i> Details
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#ordersTable').DataTable({
+                "paging": true,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                "order": [[1, "desc"]] // Sort by date column descending
+            });
+        });
+    </script>
+}
