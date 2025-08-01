@@ -16,7 +16,7 @@
         private readonly IProductService productService;
         private readonly ICategoryService categoryService;
 
-        private const int DefaultPageSize = DefaultProductsPerPageSize; // Add this constant definition
+        private const int DefaultPageSize = DefaultProductsPerPageSize;
         public ShopController(IProductService productService, ICategoryService categoryService)
         {
             this.productService = productService;
