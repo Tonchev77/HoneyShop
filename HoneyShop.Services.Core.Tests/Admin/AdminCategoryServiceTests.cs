@@ -51,6 +51,13 @@
         }
 
         [Test]
+        public void PassAlways()
+        {
+            // Test that will always pass to show that the SetUp is working
+            Assert.Pass();
+        }
+
+        [Test]
         public async Task AddCategoryAsync_WithNullModel_ReturnsFalse()
         {
 
