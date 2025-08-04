@@ -4,7 +4,6 @@
     using HoneyShop.Data.Repository.Interfaces;
     using HoneyShop.Services.Core;
     using HoneyShop.Services.Core.Contracts;
-    using HoneyShop.Services.Core.Tests.Main;
     using HoneyShop.ViewModels.Shop;
     using Moq;
     using NUnit.Framework;
@@ -21,7 +20,6 @@
         private Mock<ICategoryRepository> mockCategoryRepository;
         private IProductService productService;
 
-        // Test data
         private readonly Guid productId1 = Guid.NewGuid();
         private readonly Guid productId2 = Guid.NewGuid();
         private readonly Guid categoryId1 = Guid.NewGuid();
@@ -63,7 +61,7 @@
                     IsActive = true,
                     CategoryId = categoryId1,
                     Category = testCategories[0],
-                    CreatedAt = DateTime.Parse("2025-08-02 18:42:36"), // 2 days ago
+                    CreatedAt = DateTime.Parse("2025-08-02 18:42:36"),
                     IsDeleted = false
                 },
                 new Product
@@ -76,7 +74,7 @@
                     IsActive = true,
                     CategoryId = categoryId2,
                     Category = testCategories[1],
-                    CreatedAt = DateTime.Parse("2025-08-03 18:42:36"), // 1 day ago
+                    CreatedAt = DateTime.Parse("2025-08-03 18:42:36"),
                     IsDeleted = false
                 }
             };
@@ -84,6 +82,13 @@
             productService = new ProductService(
                 mockProductRepository.Object,
                 mockCategoryRepository.Object);
+        }
+
+        [Test]
+        public void PassAlways()
+        {
+            // Test that will always pass to show that the SetUp is working
+            Assert.Pass();
         }
 
         [Test]

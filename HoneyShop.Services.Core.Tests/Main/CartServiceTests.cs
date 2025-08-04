@@ -4,7 +4,7 @@
     using HoneyShop.Data.Repository.Interfaces;
     using HoneyShop.Services.Core;
     using HoneyShop.Services.Core.Contracts;
-    using HoneyShop.Services.Core.Tests.Main;
+    using HoneyShop.Services.Core.Tests;
     using HoneyShop.ViewModels.Cart;
     using Microsoft.AspNetCore.Identity;
     using Moq;

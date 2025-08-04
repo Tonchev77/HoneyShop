@@ -1,4 +1,4 @@
-﻿namespace HoneyShop.Services.Core.Tests.Main
+﻿namespace HoneyShop.Services.Core.Tests
 {
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;

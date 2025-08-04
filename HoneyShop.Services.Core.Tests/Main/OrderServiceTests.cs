@@ -4,7 +4,7 @@
     using HoneyShop.Data.Repository.Interfaces;
     using HoneyShop.Services.Core;
     using HoneyShop.Services.Core.Contracts;
-    using HoneyShop.Services.Core.Tests.Main;
+    using HoneyShop.Services.Core.Tests;
     using HoneyShop.ViewModels.Cart;
     using HoneyShop.ViewModels.Order;
     using MockQueryable.Moq;
@@ -91,7 +91,7 @@
                 Id = orderId,
                 UserId = userId,
                 OrderDate = DateTime.UtcNow,
-                TotalAmount = 37.97m, // 10.99 * 2 + 15.99 * 1
+                TotalAmount = 37.97m,
                 OrderStatusId = orderStatusId,
                 OrderStatus = pendingStatus,
                 ShippingCity = testOrderModel.ShippingCity,
@@ -205,7 +205,7 @@
             Assert.That(capturedOrder.ShippingCity, Is.EqualTo(testOrderModel.ShippingCity));
             Assert.That(capturedOrder.ShippingAddress, Is.EqualTo(testOrderModel.ShippingAddress));
             Assert.That(capturedOrder.OrderStatusId, Is.EqualTo(pendingStatus.Id));
-            Assert.That(capturedOrder.TotalAmount, Is.EqualTo(37.97m)); // 10.99 * 2 + 15.99 * 1
+            Assert.That(capturedOrder.TotalAmount, Is.EqualTo(37.97m));
             Assert.That(capturedOrder.IsDeleted, Is.False);
 
             mockOrderRepository.Verify(or => or.AddAsync(It.IsAny<Order>()), Times.Once);
@@ -373,7 +373,7 @@
                         },
                         Quantity = 1,
                         UnitPrice = 15.99m,
-                        IsDeleted = true // This item is deleted
+                        IsDeleted = true 
                     }
                 }
             };
