@@ -3,8 +3,6 @@
     using HoneyShop.Data.Models;
     using HoneyShop.Data.Repository.Interfaces;
     using HoneyShop.Services.Core.Admin;
-    using HoneyShop.Services.Core.Admin.Contracts;
-    using HoneyShop.Services.Core.Contracts;
     using HoneyShop.ViewModels.Admin.Home;
     using HoneyShop.ViewModels.Admin.OrderManagment;
     using Moq;
