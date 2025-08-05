@@ -460,74 +460,100 @@
         [Test]
         public async Task GetOrderStatisticsAsync_CalculatesCorrectStatistics()
         {
+            DateTime currentDate = DateTime.Parse("2025-08-05 18:06:02");
+            DateTime today = currentDate.Date;
+            DateTime startOfWeek = today.AddDays(-(int)today.DayOfWeek);
+            DateTime startOfMonth = new DateTime(today.Year, today.Month, 1);
 
-            DateTime currentDate = DateTime.Parse("2025-08-04 19:43:32");
-
-            Order todayExactOrder = new Order
+            Order todayOrder1 = new Order
             {
                 Id = Guid.NewGuid(),
-                OrderDate = currentDate.Date,
+                OrderDate = currentDate,
                 TotalAmount = 40.00m,
                 OrderStatusId = statusId1,
                 OrderStatus = testOrderStatuses[0],
                 IsDeleted = false
             };
 
-            Order finishedOrder = new Order
+            Order todayOrder2 = new Order
             {
                 Id = Guid.NewGuid(),
-                OrderDate = currentDate.Date,
+                OrderDate = currentDate,
                 TotalAmount = 100.00m,
-                OrderStatusId = testOrderStatuses[3].Id,
-                OrderStatus = testOrderStatuses[3],
+                OrderStatusId = statusId1,
+                OrderStatus = testOrderStatuses[0],
                 IsDeleted = false
             };
 
-            Order yesterdayOrder = new Order
+            Order thisWeekOrder = new Order
             {
                 Id = Guid.NewGuid(),
-                OrderDate = currentDate.Date.AddDays(-1),
+                OrderDate = today.AddDays(-1),
                 TotalAmount = 60.00m,
                 OrderStatusId = statusId2,
                 OrderStatus = testOrderStatuses[1],
                 IsDeleted = false
             };
 
-            Order lastWeekOrder = new Order
+            Order thisMonthOrder = new Order
             {
                 Id = Guid.NewGuid(),
-                OrderDate = currentDate.Date.AddDays(-7),
+                OrderDate = startOfMonth,
                 TotalAmount = 80.00m,
                 OrderStatusId = testOrderStatuses[2].Id,
                 OrderStatus = testOrderStatuses[2],
                 IsDeleted = false
             };
 
-            List<Order> allOrders = new List<Order> { todayExactOrder, finishedOrder, yesterdayOrder, lastWeekOrder };
+            Order oldOrder = new Order
+            {
+                Id = Guid.NewGuid(),
+                OrderDate = startOfMonth.AddDays(-5),
+                TotalAmount = 200.00m,
+                OrderStatusId = testOrderStatuses[3].Id,
+                OrderStatus = testOrderStatuses[3],
+                IsDeleted = false
+            };
+
+            List<Order> allOrders = new List<Order> 
+            {
+                todayOrder1,
+                todayOrder2,
+                thisWeekOrder,
+                thisMonthOrder,
+                oldOrder
+            };
+
             IQueryable<Order> mockQueryable = allOrders.AsQueryable().BuildMock();
 
             mockOrderRepository.Setup(repo => repo.GetAllAttached())
                 .Returns(mockQueryable);
 
-            DashboardOrderStats? stats = await orderService.GetOrderStatisticsAsync();
+            DashboardOrderStats stats = await orderService.GetOrderStatisticsAsync();
 
             Assert.IsNotNull(stats);
 
-            Assert.AreEqual(4, stats.TotalOrders);
+            Assert.AreEqual(5, stats.TotalOrders);
 
-            Assert.AreEqual(1, stats.PendingOrders);
+            Assert.AreEqual(2, stats.PendingOrders);
             Assert.AreEqual(1, stats.ConfirmedOrders);
             Assert.AreEqual(1, stats.SentOrders);
             Assert.AreEqual(1, stats.FinishedOrders);
 
-            decimal expectedTotalSales = todayExactOrder.TotalAmount + finishedOrder.TotalAmount +
-                                        yesterdayOrder.TotalAmount + lastWeekOrder.TotalAmount;
+            decimal expectedTotalSales = todayOrder1.TotalAmount + todayOrder2.TotalAmount +
+                                       thisWeekOrder.TotalAmount + thisMonthOrder.TotalAmount +
+                                       oldOrder.TotalAmount;
             Assert.AreEqual(expectedTotalSales, stats.TotalSales);
 
-
-            decimal expectedDailySales = todayExactOrder.TotalAmount + finishedOrder.TotalAmount; 
-
+            decimal expectedDailySales = todayOrder1.TotalAmount + todayOrder2.TotalAmount;
             Assert.AreEqual(expectedDailySales, stats.DailySales);
+
+            decimal expectedWeeklySales = todayOrder1.TotalAmount + todayOrder2.TotalAmount + thisWeekOrder.TotalAmount;
+            Assert.AreEqual(expectedWeeklySales, stats.WeeklySales);
+
+            decimal expectedMonthlySales = todayOrder1.TotalAmount + todayOrder2.TotalAmount +
+                                         thisWeekOrder.TotalAmount + thisMonthOrder.TotalAmount;
+            Assert.AreEqual(expectedMonthlySales, stats.MonthlySales);
         }
 
         [Test]
