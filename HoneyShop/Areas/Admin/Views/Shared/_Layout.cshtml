@@ -47,7 +47,11 @@
                                     @User.Identity?.Name
                                 </p>
                             </li> <!--end::User Image--> <!--begin::Menu Body-->
-                            <li class="user-footer"> <a href="#" class="btn btn-default btn-flat float-end">Sign out</a> </li> <!--end::Menu Footer-->
+                            <li class="user-footer">
+                                <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                                    <button type="submit" class="btn btn-default btn-flat float-end">Sign out</button>
+                                </form>
+                            </li> <!--end::Menu Footer-->
                         </ul>
                     </li> <!--end::User Menu Dropdown-->
                 </ul> <!--end::End Navbar Links-->
